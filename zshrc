@@ -15,7 +15,6 @@ alias zed="vim ~/.zshrc ; source ~/.zshrc"
 alias rez="source ~/.zshrc"
 
 uprc() {
-  set -e
   pushd ~/.rccola
   git add zshrc vimrc link
   git commit -m 'Update rc files'
