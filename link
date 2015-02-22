@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd $HOME
+ln -s $HOME/.rccola/zshrc .zshrc
+ln -s $HOME/.rccola/vimrc .vimrc
+
