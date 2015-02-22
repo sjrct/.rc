@@ -17,7 +17,7 @@ alias rez="source ~/.zshrc"
 uprc() {
   set -e
   pushd ~/.rccola
-  git add *
+  git add zshrc vimrc link
   git commit -m 'Update rc files'
   git push origin master
   popd
