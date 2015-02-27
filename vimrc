@@ -1,6 +1,7 @@
 source $HOME/.rccola/local/vimrc
 
 set nocompatible
+set mouse=n
 
 " Appearance options
 set nu rnu
@@ -49,4 +50,7 @@ command! Ev vs $MYVIMRC
 command! Sv so $MYVIMRC
 command! Elv vs $HOME/.rccola/local/vimrc
 command! Slv so $HOME/.rccola/local/vimrc
+command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
+
+execute pathogen#infect()
 

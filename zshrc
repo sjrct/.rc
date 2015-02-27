@@ -6,13 +6,21 @@ alias l="ls -G"
 alias la="ls -a -G"
 alias ll="ls -l -G"
 alias p="pwd"
+alias v="vim"
+alias frm="rm -rf"
 
 alias diff="colordiff -up"
 alias less="less -R"
-alias ag="ag -u"
 alias ff="find . -name"
 alias zed="vim ~/.zshrc ; source ~/.zshrc"
 alias rez="source ~/.zshrc"
+
+alias gitpl='git pull --rebase'
+alias gitps='git push'
+alias gits='git status'
+alias gitc='git commit'
+alias gitd='git diff'
+alias gitl='git log'
 
 uprc() {
   pushd ~/.rccola
@@ -29,7 +37,7 @@ bindkey -e
 export HISTFILE=~/.zhist
 export HISTSIZE=10000
 export SAVEHIST=10000
-set hist_ignore_dups extended_history hist_find_no_dups
+setopt hist_ignore_dups extended_history hist_find_no_dups
 
 # Prompt
 export PROMPT="%B%F{blue}%2~%f%b %# "
@@ -39,6 +47,7 @@ export PATH=/usr/local/bin:$PATH
 
 # Directory history
 export DIRSTACKSIZE=20
+setopt autocd
 setopt auto_pushd pushd_minus pushd_silent
 alias dh="dirs -v"
 alias dhg="dirs -v | grep"
