@@ -1,5 +1,3 @@
-source $HOME/.rccola/local/vimrc
-
 set nocompatible
 set mouse=n
 
@@ -54,3 +52,5 @@ command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
 
 execute pathogen#infect()
 
+" Load local overrides/settings
+source $HOME/.rccola/local/vimrc

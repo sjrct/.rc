@@ -1,6 +1,5 @@
-source $HOME/.rccola/local/zshrc
-
 # Aliases
+alias catdog="cp"
 alias ls="ls -G"
 alias l="ls -G"
 alias la="ls -a -G"
@@ -32,6 +31,9 @@ uprc() {
 
 # Key bindings
 bindkey -e
+
+export EDITOR=vim
+export LESSHISTFILE=/dev/null
 
 # History options
 export HISTFILE=~/.zhist
@@ -66,7 +68,12 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.cache/zsh/comp
+zstyle ':completion:*' accept-exact '*(N)'
+
 zstyle ':completion:*' special-dirs true
+setopt extended_glob
 
 # So beautiful, its like a waterfall!
 alias -g ...='../..'
@@ -100,3 +107,5 @@ alias -g ..............................='../../../../../../../../../../../../../
 alias -g ...............................='../../../../../../../../../../../../../../../../../../../../../../../../../../../../../..'
 alias -g ................................='../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../..'
 
+# Load local options/overrides
+source $HOME/.rccola/local/zshrc
