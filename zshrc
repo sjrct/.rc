@@ -1,9 +1,18 @@
 # Aliases
+if ls --color 2>&1 > /dev/null ; then
+  # GNU ls
+  LS_FLAGS="--color --group-directories-first"
+else
+  # BSD/Mac ls
+  LS_FLAGS="-G"
+fi
+
+alias ls="ls $LS_FLAGS"
+alias l="ls $LS_FLAGS"
+alias la="ls -a $LS_FLAGS"
+alias ll="ls -l $LS_FLAGS"
+
 alias catdog="cp"
-alias ls="ls -G"
-alias l="ls -G"
-alias la="ls -a -G"
-alias ll="ls -l -G"
 alias p="pwd"
 alias v="vim"
 alias frm="rm -rf"
