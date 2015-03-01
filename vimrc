@@ -28,6 +28,8 @@ set undodir=$HOME/.vim/undo
 
 filetype plugin indent on
 au FileType * setlocal comments-=:// comments+=f://
+au BufNewFile,BufRead *.asm setf nasm
+au BufNewFile,BufRead *.inc setf nasm
 
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$\| \+\ze\t/

@@ -5,14 +5,15 @@ ln -s ~/.rccola/zshrc ~/.zshrc
 ln -s ~/.rccola/vimrc ~/.vimrc
 
 # Tell git that local rc file changes can be ignored
-cd ~/.rccola
-git update-index --assume-unchanged local/*
+git -C ~/.rccola update-index --assume-unchanged local/*
 
 # Make vim directories
 mkdir -p ~/.vim/autoload
 mkdir -p ~/.vim/bundle
 mkdir -p ~/.vim/undo
 mkdir -p ~/.vim/swap
+
+ln -s ~/.rccola/vim/ftplugin ~/.vim/ftplugin
 
 # Install vim pathogen
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
