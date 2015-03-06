@@ -1,5 +1,5 @@
 # Aliases
-if ls --color 2>&1 > /dev/null ; then
+if ls --color 2> /dev/null > /dev/null ; then
   # GNU ls
   LS_FLAGS="--color --group-directories-first"
 else
@@ -21,6 +21,7 @@ alias diff="colordiff -up"
 alias less="less -R"
 alias ff="find . -name"
 alias zed="vim ~/.zshrc ; source ~/.zshrc"
+alias zled="vim ~/.rccola/local/zshrc ; source ~/.rccola/local/zshrc"
 alias rez="source ~/.zshrc"
 
 alias gitpl='git pull --rebase'
@@ -49,6 +50,7 @@ export HISTFILE=~/.zhist
 export HISTSIZE=10000
 export SAVEHIST=10000
 setopt hist_ignore_dups extended_history hist_find_no_dups
+alias h="history"
 
 # Prompt
 export PROMPT="%B%F{blue}%2~%f%b %# "

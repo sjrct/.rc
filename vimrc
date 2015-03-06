@@ -41,10 +41,13 @@ iab cni console.info
 iab cne console.error
 iab cnw console.warn
 
+let mapleader = "-"
+
 inoremap <left> <nop>
 inoremap <right> <nop>
 inoremap <up> <nop>
 inoremap <down> <nop>
+nnoremap <Leader>c :set cuc!<Cr>
 
 command! Ev vs $MYVIMRC
 command! Sv so $MYVIMRC
