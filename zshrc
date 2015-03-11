@@ -15,6 +15,7 @@ alias ll="ls -l $LS_FLAGS"
 alias catdog="cp"
 alias p="pwd"
 alias v="vim"
+alias g="git"
 alias frm="rm -rf"
 
 alias diff="colordiff -up"
