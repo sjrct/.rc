@@ -52,11 +52,11 @@ nnoremap <Leader>s :set hls!<Cr>
 
 command! Ev vs $MYVIMRC
 command! Sv so $MYVIMRC
-command! Elv vs $HOME/.rccola/local/vimrc
-command! Slv so $HOME/.rccola/local/vimrc
+command! Elv vs $HOME/.rcola/local/vimrc
+command! Slv so $HOME/.rcola/local/vimrc
 command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
 
 execute pathogen#infect()
 
 " Load local overrides/settings
-source $HOME/.rccola/local/vimrc
+source $HOME/.rcola/local/vimrc

@@ -22,7 +22,7 @@ alias diff="colordiff -up"
 alias less="less -R"
 alias ff="find . -name"
 alias zed="vim ~/.zshrc ; source ~/.zshrc"
-alias zled="vim ~/.rccola/local/zshrc ; source ~/.rccola/local/zshrc"
+alias zled="vim ~/.rcola/local/zshrc ; source ~/.rcola/local/zshrc"
 alias rez="source ~/.zshrc"
 
 alias gitpl='git pull --rebase'
@@ -33,7 +33,7 @@ alias gitd='git diff'
 alias gitl='git log'
 
 uprc() {
-  pushd ~/.rccola
+  pushd ~/.rcola
   git add zshrc vimrc link
   git commit -m 'Update rc files'
   git push origin master
@@ -120,4 +120,4 @@ alias -g ...............................='../../../../../../../../../../../../..
 alias -g ................................='../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../..'
 
 # Load local options/overrides
-source $HOME/.rccola/local/zshrc
+source $HOME/.rcola/local/zshrc
