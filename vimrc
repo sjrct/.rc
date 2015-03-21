@@ -48,6 +48,7 @@ inoremap <right> <nop>
 inoremap <up> <nop>
 inoremap <down> <nop>
 nnoremap <Leader>c :set cuc!<Cr>
+nnoremap <Leader>s :set hls!<Cr>
 
 command! Ev vs $MYVIMRC
 command! Sv so $MYVIMRC
