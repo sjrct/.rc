@@ -1,11 +1,11 @@
 #!/bin/zsh
 
-# Link .rccola files to true rc files
-ln -s ~/.rccola/zshrc ~/.zshrc
-ln -s ~/.rccola/vimrc ~/.vimrc
+# Link .rcola files to true rc files
+ln -s ~/.rcola/zshrc ~/.zshrc
+ln -s ~/.rcola/vimrc ~/.vimrc
 
 # Tell git that local rc file changes can be ignored
-git -C ~/.rccola update-index --assume-unchanged local/*
+git -C ~/.rcola update-index --assume-unchanged local/*
 
 # Make vim directories
 mkdir -p ~/.vim/autoload
@@ -13,7 +13,7 @@ mkdir -p ~/.vim/bundle
 mkdir -p ~/.vim/undo
 mkdir -p ~/.vim/swap
 
-ln -s ~/.rccola/vim/ftplugin ~/.vim/ftplugin
+ln -s ~/.rcola/vim/ftplugin ~/.vim/ftplugin
 
 # Install vim pathogen
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
