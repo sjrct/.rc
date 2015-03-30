@@ -25,12 +25,14 @@ alias zed="vim ~/.zshrc ; source ~/.zshrc"
 alias zled="vim ~/.rcola/local/zshrc ; source ~/.rcola/local/zshrc"
 alias rez="source ~/.zshrc"
 
-alias gitpl='git pull --rebase'
-alias gitps='git push'
-alias gits='git status'
-alias gitc='git commit'
-alias gitd='git diff'
-alias gitl='git log'
+alias gtpl='git pull'
+alias gtrb='git rebase'
+alias gtph='git push'
+alias gtst='git status'
+alias gtdf='git diff'
+alias gtcm='git commit'
+alias gtlg='git log --oneline'
+alias gtad='git add'
 
 uprc() {
   pushd ~/.rcola
