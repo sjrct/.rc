@@ -33,6 +33,8 @@ alias gtdf='git diff'
 alias gtcm='git commit'
 alias gtlg='git log --oneline'
 alias gtad='git add'
+alias gtch='git checkout'
+alias gtcb='git checkout -b'
 
 uprc() {
   pushd ~/.rcola
