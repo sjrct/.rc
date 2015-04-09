@@ -35,6 +35,7 @@ alias gtlg='git log --oneline'
 alias gtad='git add'
 alias gtch='git checkout'
 alias gtcb='git checkout -b -t'
+alias gtbr='git branch'
 
 uprc() {
   pushd ~/.rcola
