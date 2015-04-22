@@ -17,6 +17,8 @@ alias p="pwd"
 alias v="vim"
 alias g="git"
 alias frm="rm -rf"
+alias h="history"
+alias hgr="fc -l 0 -1 | grep"
 
 alias diff="colordiff -up"
 alias less="less -R"
@@ -60,7 +62,6 @@ export HISTFILE=~/.zhist
 export HISTSIZE=10000
 export SAVEHIST=10000
 setopt hist_ignore_dups extended_history hist_find_no_dups
-alias h="history"
 
 # Prompt
 export PROMPT="%B%F{blue}%2~%f%b %# "
