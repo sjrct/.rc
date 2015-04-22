@@ -45,6 +45,10 @@ uprc() {
   popd
 }
 
+vf() {
+  vim `find . -name $1`
+}
+
 # Key bindings
 bindkey -e
 
