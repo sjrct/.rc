@@ -19,6 +19,9 @@ set sr
 set showmatch
 set matchtime=1
 
+" Backslashes in regexes less necessary
+set magic
+
 " Swap file location
 set dir=$HOME/.vim/swap
 
