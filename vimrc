@@ -1,5 +1,6 @@
 set nocompatible
 set mouse=n
+set list listchars=tab:»\ ,trail:·,nbsp:.
 
 " Appearance options
 set nu rnu
@@ -28,6 +29,8 @@ set dir=$HOME/.vim/swap
 " Undo history
 set undofile
 set undodir=$HOME/.vim/undo
+
+set tags=./tags;
 
 filetype plugin indent on
 au FileType * setlocal comments-=:// comments+=f://
@@ -60,6 +63,11 @@ command! Slv so $HOME/.rcola/local/vimrc
 command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
 
 execute pathogen#infect()
+
+" DetectIndent plugin settings
+au BufReadPost * :DetectIndent
+let g:detectindent_preferred_expandtab = 0
+let g:detectindent_preferred_indent = 4
 
 " Load local overrides/settings
 source $HOME/.rcola/local/vimrc
