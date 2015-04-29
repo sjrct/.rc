@@ -13,7 +13,11 @@ mkdir -p ~/.vim/bundle
 mkdir -p ~/.vim/undo
 mkdir -p ~/.vim/swap
 
-ln -s ~/.rcola/vim/ftplugin ~/.vim/ftplugin
+if [[ ! -e ~/.vim/ftplugin ]] ; then
+  ln -s ~/.rcola/vim/ftplugin ~/.vim/ftplugin
+else
+  echo ~/.vim/ftplugin already exists, not symlinking
+fi
 
 # Install vim pathogen
 curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
