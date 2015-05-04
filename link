@@ -21,6 +21,6 @@ curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 # Install vim pathogen modules
 cd ~/.vim/bundle
 git clone git://github.com/godlygeek/tabular.git
-git clone git://github.com/ciaranm/detectindent.git
+git clone git://github.com/sjrct/detectindent.git
 git clone git://github.com/kien/ctrlp.vim.git
 git clone git://github.com/vim-scripts/vim-stylus.git

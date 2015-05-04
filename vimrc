@@ -37,15 +37,8 @@ au FileType * setlocal comments-=:// comments+=f://
 au BufNewFile,BufRead *.asm setf nasm
 au BufNewFile,BufRead *.inc setf nasm
 
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$\| \+\ze\t/
-
-" TODO associate with filetype .js
-iab fnc function
-iab cnl console.log
-iab cni console.info
-iab cne console.error
-iab cnw console.warn
+"highlight ExtraWhitespace ctermbg=red guibg=red
+"match ExtraWhitespace /\s\+$\| \+\ze\t/
 
 let mapleader = "-"
 
