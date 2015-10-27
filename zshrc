@@ -68,6 +68,7 @@ export PROMPT="%B%F{blue}%2~%f%b %# "
 export RPROMPT="%(?..%B[%?]%b)%1(j.%F{green}%j%f.)"
 
 export PATH=/usr/local/bin:$PATH
+export GOPATH=$HOME/go
 
 # Directory history
 export DIRSTACKSIZE=20
