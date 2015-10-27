@@ -12,6 +12,7 @@ alias l="ls $LS_FLAGS"
 alias la="ls -a $LS_FLAGS"
 alias ll="ls -l $LS_FLAGS"
 
+alias cp="cp -v"
 alias catdog="cp"
 alias p="pwd"
 alias v="vim"
@@ -19,6 +20,7 @@ alias g="git"
 alias frm="rm -rf"
 alias h="history"
 alias hgr="fc -l 0 -1 | grep"
+alias ocaml="rlwrap ocaml"
 
 alias diff="colordiff -up"
 alias less="less -R"
@@ -48,7 +50,7 @@ uprc() {
 }
 
 vf() {
-  vim `find . -name $1`
+  vim `find . -name $1` $2 $3 $4 $5 $6 $7 $8 $9
 }
 
 # Key bindings

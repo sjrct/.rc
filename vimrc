@@ -19,6 +19,9 @@ set sr
 set showmatch
 set matchtime=1
 
+" ~ takes a motion command after it
+set tildeop
+
 " Backslashes in regexes less necessary
 set magic
 
@@ -35,16 +38,12 @@ filetype plugin indent on
 au FileType * setlocal comments-=:// comments+=f://
 au BufNewFile,BufRead *.asm setf nasm
 au BufNewFile,BufRead *.inc setf nasm
+au BufNewFile,BufRead *.jsm setf javascript
+
+au BufReadCmd *.jar,*.bundle call zip#Browse(expand("<amatch>"))
 
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$\| \+\ze\t/
-
-" TODO associate with filetype .js
-iab fnc function
-iab cnl console.log
-iab cni console.info
-iab cne console.error
-iab cnw console.warn
 
 let mapleader = "-"
 
@@ -53,6 +52,7 @@ inoremap <right> <nop>
 inoremap <up> <nop>
 inoremap <down> <nop>
 nnoremap <Leader>c :set cuc!<Cr>
+nnoremap <Leader>l :set cul!<Cr>
 nnoremap <Leader>s :set hls!<Cr>
 
 command! Ev vs $MYVIMRC
@@ -60,6 +60,17 @@ command! Sv so $MYVIMRC
 command! Elv vs $HOME/.rcola/local/vimrc
 command! Slv so $HOME/.rcola/local/vimrc
 command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
+
+" modify selected text using combining diacritics
+command! -range -nargs=0 Overline        call s:CombineSelection(<line1>, <line2>, '0305')
+command! -range -nargs=0 Underline       call s:CombineSelection(<line1>, <line2>, '0332')
+command! -range -nargs=0 DoubleUnderline call s:CombineSelection(<line1>, <line2>, '0333')
+command! -range -nargs=0 Strikethrough   call s:CombineSelection(<line1>, <line2>, '0336')
+
+function! s:CombineSelection(line1, line2, cp)
+  execute 'let char = "\u'.a:cp.'"'
+  execute a:line1.','.a:line2.'s/\%V[^[:cntrl:]]/&'.char.'/ge'
+endfunction
 
 execute pathogen#infect()
 
