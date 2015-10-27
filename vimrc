@@ -1,6 +1,5 @@
 set nocompatible
 set mouse=n
-set list listchars=tab:»\ ,trail:·,nbsp:.
 
 " Appearance options
 set nu rnu
@@ -10,9 +9,9 @@ set ruler
 set display=uhex
 
 " Tabbing options
-set ts=2
-set sw=2
-set expandtab
+set ts=4
+set sw=4
+set noexpandtab
 set autoindent
 set smarttab
 set sr
