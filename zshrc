@@ -30,6 +30,7 @@ alias zed="vim ~/.zshrc ; source ~/.zshrc"
 alias zled="vim ~/.rcola/local/zshrc ; source ~/.rcola/local/zshrc"
 alias rez="source ~/.zshrc"
 
+alias gtcl='git clone'
 alias gtpl='git pull'
 alias gtrb='git rebase'
 alias gtph='git push'
