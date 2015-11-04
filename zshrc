@@ -12,7 +12,6 @@ alias l="ls $LS_FLAGS"
 alias la="ls -a $LS_FLAGS"
 alias ll="ls -l $LS_FLAGS"
 
-alias rm="rm -v"
 alias cp="cp -v"
 alias catdog="cp"
 alias p="pwd"
