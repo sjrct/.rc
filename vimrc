@@ -4,7 +4,7 @@ set mouse=n
 " Appearance options
 set nu rnu
 syntax on
-colo delek
+colo moonshine
 set ruler
 set display=uhex
 
@@ -18,9 +18,6 @@ set sr
 
 set showmatch
 set matchtime=1
-
-" ~ takes a motion command after it
-set tildeop
 
 " Backslashes in regexes less necessary
 set magic
@@ -54,6 +51,8 @@ inoremap <down> <nop>
 nnoremap <Leader>c :set cuc!<Cr>
 nnoremap <Leader>l :set cul!<Cr>
 nnoremap <Leader>s :set hls!<Cr>
+nnoremap <Leader>o :tabp<Cr>
+nnoremap <Leader>o :tabn<Cr>
 
 command! Ev vs $MYVIMRC
 command! Sv so $MYVIMRC

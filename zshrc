@@ -22,7 +22,7 @@ alias h="history"
 alias hgr="fc -l 0 -1 | grep"
 alias ocaml="rlwrap ocaml"
 
-alias diff="colordiff -up"
+alias diff="vimdiff"
 alias less="less -R"
 alias ff="find . -name"
 alias zed="vim ~/.zshrc ; source ~/.zshrc"

@@ -10,6 +10,7 @@ git -C ~/.rcola update-index --assume-unchanged local/*
 # Make vim directories
 mkdir -p ~/.vim/autoload
 mkdir -p ~/.vim/bundle
+mkdir -p ~/.vim/colors
 mkdir -p ~/.vim/undo
 mkdir -p ~/.vim/swap
 
@@ -30,3 +31,6 @@ git clone git://github.com/kien/ctrlp.vim.git
 git clone git://github.com/vim-scripts/vim-stylus.git
 git clone git://github.com/tpope/vim-fugitive.git
 vim -u NONE -c "helptags vim-fugitive/doc" -c q
+
+# Install moonshine colorscheme
+curl -LSso ~/.vim/colors/moonshine.vim https://raw.githubusercontent.com/KKPMW/moonshine-vim/master/colors/moonshine.vim
