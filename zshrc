@@ -43,6 +43,8 @@ vf() {
 
 # Key bindings
 bindkey -e
+bindkey "^[[3~"  delete-char     # Delete key
+bindkey "^[3;5~" delete-char     # Delete key some other keyboards
 
 export EDITOR=vim
 export LESSHISTFILE=/dev/null
