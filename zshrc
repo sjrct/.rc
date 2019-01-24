@@ -90,6 +90,13 @@ zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' special-dirs true
 setopt extended_glob
 
+# Setup nvm if we have it
+[[ -e "$HOME/.nvm" ]] && export NVM_DIR="$HOME/.nvm"
+if [[ -n "$NVM_DIR" ]]; then
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+
 # So beautiful, its like a waterfall!
 alias -g ...='../..'
 alias -g ....='../../..'
