@@ -97,7 +97,7 @@ if [[ -n "$NVM_DIR" ]]; then
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
 
-# So beautiful, its like a waterfall!
+# So beautiful, it's like a waterfall!
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
