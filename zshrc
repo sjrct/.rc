@@ -28,6 +28,7 @@ alias ff="find . -name"
 alias zed="vim ~/.zshrc ; source ~/.zshrc"
 alias zled="vim ~/.rcola/local/zshrc ; source ~/.rcola/local/zshrc"
 alias rez="source ~/.zshrc"
+alias hb=halibot
 
 uprc() {
   pushd ~/.rcola
