@@ -63,6 +63,9 @@ export RPROMPT="%(?..%B[%?]%b)%1(j.%F{green}%j%f.)"
 export PATH=/usr/local/bin:$PATH
 export GOPATH=$HOME/go
 
+# Erlang flags
+export ERL_AFLAGS="-kernel shell_history enabled"
+
 # Directory history
 export DIRSTACKSIZE=20
 setopt autocd
