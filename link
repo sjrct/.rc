@@ -1,40 +1,76 @@
 #!/bin/zsh
+#
+# Install or update my RC files installation
+#
+
+set -e
+
+INST=$HOME
+if [[ -n $1 ]] ; then
+  INST=$1
+fi
+echo Installing to $INST
 
 # Link .rcola files to true rc files
-ln -s ~/.rcola/zshrc ~/.zshrc
-ln -s ~/.rcola/vimrc ~/.vimrc
-
-# Tell git that local rc file changes can be ignored
-git -C ~/.rcola update-index --assume-unchanged local/*
-
-# Make vim directories
-mkdir -p ~/.vim/autoload
-mkdir -p ~/.vim/bundle
-mkdir -p ~/.vim/colors
-mkdir -p ~/.vim/undo
-mkdir -p ~/.vim/swap
-
-if [[ ! -e ~/.vim/ftplugin ]] ; then
-  ln -s ~/.rcola/vim/ftplugin ~/.vim/ftplugin
-else
-  echo ~/.vim/ftplugin already exists, not symlinking
+if [[ ( -e $INST/.zshrc && ! -L $INST/.zshrc) \
+  || ( -e $INST/.vimrc && ! -L $INST/.vimrc) ]] ;
+  then
+    echo "Non-symlinked .zshrc and .vimrc already exists!\nCannot install!"
+    exit 1
 fi
 
+[[ ! -L $INST/.zshrc ]] && ln -s $HOME/.rcola/zshrc $INST/.zshrc
+[[ ! -L $INST/.vimrc ]] && ln -s $HOME/.rcola/vimrc $INST/.vimrc
+
+# Tell git that local rc file changes can be ignored
+git -C $HOME/.rcola update-index --assume-unchanged local/*
+
+# Make vim directories
+mkdir -p $INST/.vim/autoload
+mkdir -p $INST/.vim/bundle
+mkdir -p $INST/.vim/colors
+mkdir -p $INST/.vim/undo
+mkdir -p $INST/.vim/swap
+mkdir -p $INST/.vim/ftplugin
+
+# Link vim files
+function link_vimfile() {
+  if link
+  echo Linking $HOME/.rcola/vim/$1 to $INST/.vim/$1
+  [[ ! -e $HOME/.vim/$1 ]] && ln -s $(pwd)/$1 $HOME/.vim/$1
+}
+
+pushd $HOME/.rcola/vim
+find . -type f -exec zsh -c 'link_vimfile "$0"' {}  \;
+popd
+
 # Install vim pathogen
-curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+curl -LSso $INST/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
 # Install vim pathogen modules
-cd ~/.vim/bundle
-git clone git://github.com/godlygeek/tabular.git
-git clone git://github.com/sjrct/detectindent.git
-git clone git://github.com/kien/ctrlp.vim.git
-git clone git://github.com/vim-scripts/vim-stylus.git
-git clone git://github.com/tpope/vim-fugitive.git
-git clone git://github.com/altercation/vim-colors-solarized.git
+function clone_or_pull() {
+  repo=$(basename ${1%.git})
+  if [[ -e $repo ]] ; then
+    echo "Updating $repo..."
+    git -C $repo pull
+  else
+    git clone $1
+  fi
+}
+
+cd $INST/.vim/bundle
+clone_or_pull git://github.com/godlygeek/tabular.git
+clone_or_pull git://github.com/sjrct/detectindent.git
+clone_or_pull git://github.com/kien/ctrlp.vim.git
+clone_or_pull git://github.com/vim-scripts/vim-stylus.git
+clone_or_pull git://github.com/altercation/vim-colors-solarized.git
+clone_or_pull git://github.com/tpope/vim-fugitive.git
+clone_or_pull git://github.com/pangloss/vim-javascript.git
+# TODO bufexplorer, NERD_tree, python-imports (req. python-support.nvim?), seoul256.bim, vim-rhubarb?
 vim -u NONE -c "helptags vim-fugitive/doc" -c q
 
 # Install moonshine colorscheme
-curl -LSso ~/.vim/colors/moonshine.vim https://raw.githubusercontent.com/KKPMW/moonshine-vim/master/colors/moonshine.vim
+curl -LSso $INST/.vim/colors/moonshine.vim https://raw.githubusercontent.com/KKPMW/moonshine-vim/master/colors/moonshine.vim
 
 # Generic git config stuff
 #   Credits:

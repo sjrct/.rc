@@ -1,17 +1,28 @@
 set nocompatible
+
+if has('nvim')
+  set runtimepath^=~/.vim runtimepath+=~/.vim/after
+  let &packpath = &runtimepath
+endif
+
 execute pathogen#infect()
+Helptags
 
 " Appearance options
 set nu rnu
 syntax on
-colo moonshine
-set ruler
+"let g:solarized_termcolors=256
+"set bg=dark
+"colo solarized
+colo seoul256
 set display=uhex
 
 " Tabbing options
 set ts=4 sw=4
-set noexpandtab
+set expandtab
 set autoindent
+set smartindent
+"set inde=''      " Turn off annoying reidenting of current line
 set smarttab
 set sr
 
@@ -22,12 +33,16 @@ set dir=$HOME/.vim/swap     " Swap file location
 set mouse=n                 " Mouse enabled in normal mode
 set keywordprg=:help        " K uses :help
 set grepprg=ag              " Use the silver searcher for :grep
+set ruler
+set cul
+set autowrite
+set hidden
 
 " Undo history
 set undofile
 set undodir=$HOME/.vim/undo
 
-set tags=./tags;
+"set tags=./tags;
 
 filetype plugin indent on
 au FileType * setlocal comments-=:// comments+=f://
@@ -40,12 +55,30 @@ au BufNewFile,BufRead *.jsm setf javascript
 " Browse jars and bundles as zip files
 au BufReadCmd *.jar,*.bundle call zip#Browse(expand("<amatch>"))
 
+" Tags for languages
+au FileType python setlocal tags=./tags,tags,$HOME/.vim/tags/python3
+
+" Move new help windows to right
+"au FileType help wincmd L | set bh=unload
+
 " Highlight extra whitespace
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$\| \+\ze\t/
 
 " Prefix for custom shortcuts
 let mapleader = "-"
+
+" Highlight words under the cursor
+function! MatchUnderCursor()
+  if get(b:, 'cursor_match_id', 0) != 0
+    call matchdelete(b:cursor_match_id)
+  endif
+
+  let b:cursor_match_id = matchadd('WordUnderCursor', '\<' . expand('<cword>') . '\>')
+endfunction
+au CursorMoved * :call MatchUnderCursor()
+au CursorMovedI * :call MatchUnderCursor()
+highlight WordUnderCursor cterm=underline gui=underline
 
 " Ignore arrow keys
 inoremap <left> <nop>
@@ -61,11 +94,29 @@ nnoremap <Leader>o :tabp<Cr>
 nnoremap <Leader>p :tabn<Cr>
 nnoremap <Leader>w :tabc<Cr>
 nnoremap <Leader>e :tabe<Cr>
-nnoremap <Leader>/ :Grep 
-nnoremap <Leader>? :Grep <cword>
+nnoremap <Leader>/ :LGrep 
+nnoremap <Leader>? :LGrep <cword>
+nnoremap <Leader>' :NERDTreeToggle<Cr>
+nnoremap <Leader>n :set nu! rnu!<Cr>
+nnoremap <Leader>] :tab <cword><Cr>
+
+nnoremap <Leader>h :execute ":help " . expand("<cword>")<Cr>
+
+"nnoremap <Leader>h ^
+"nnoremap <Leader>l $
+
+" Fixlist
+nnoremap <Leader>F :lopen<Cr>
+nnoremap <Leader>f :lnext<Cr>
 
 " Git commands
 nnoremap <Leader>gb :Gblame<Cr>
+nnoremap <Leader>gd :Gdiff<Cr>
+nnoremap <Leader>gl :Gllog<Cr>:lopen<Cr>
+
+" Python import commands
+nnoremap <Leader>ip :ImportName<Cr>
+nnoremap <Leader>iP :ImportNameHere<Cr>
 
 " Custom commands
 command! Ev e $MYVIMRC
@@ -73,7 +124,7 @@ command! Sv so $MYVIMRC
 command! Elv e $HOME/.rcola/local/vimrc
 command! Slv so $HOME/.rcola/local/vimrc
 command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
-command! -nargs=+ -complete=function Grep grep! <args> | copen
+command! -nargs=+ -complete=function LGrep lgrep! <args> | lopen
 command! -nargs=+ Help tab :help <args>
 
 " modify selected text using combining diacritics
@@ -93,11 +144,16 @@ endfunction
 set laststatus=2
 set showtabline=2
 
-
 " DetectIndent plugin settings
 au BufReadPost * :DetectIndent
 let g:detectindent_preferred_expandtab = 0
 let g:detectindent_preferred_indent = 4
+
+" Nerd tree options
+let g:NERDTreeWinSize = 50
+
+" Gutentag options
+let g:gutentags_ctags_exclude = ['*mypy*']
 
 " Load local overrides/settings
 source $HOME/.rcola/local/vimrc

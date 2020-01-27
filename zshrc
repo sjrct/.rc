@@ -15,7 +15,9 @@ alias ll="ls -l $LS_FLAGS"
 alias cp="cp -v"
 alias catdog="cp"
 alias p="pwd"
-alias v="vim"
+alias v="nvim"
+alias vim="nvim"
+
 alias g="git"
 alias frm="rm -rf"
 alias h="history"
@@ -25,8 +27,8 @@ alias ocaml="rlwrap ocaml"
 alias diff="vimdiff"
 alias less="less -R"
 alias ff="find . -name"
-alias zed="vim ~/.zshrc ; source ~/.zshrc"
-alias zled="vim ~/.rcola/local/zshrc ; source ~/.rcola/local/zshrc"
+alias zed="nvim ~/.zshrc ; source ~/.zshrc"
+alias zled="nvim ~/.rcola/local/zshrc ; source ~/.rcola/local/zshrc"
 alias rez="source ~/.zshrc"
 
 uprc() {
@@ -38,7 +40,7 @@ uprc() {
 }
 
 vf() {
-  vim `find . -name $1` $2 $3 $4 $5 $6 $7 $8 $9
+  nvim `find . -name $1` $2 $3 $4 $5 $6 $7 $8 $9
 }
 
 # Key bindings
@@ -46,7 +48,7 @@ bindkey -e
 bindkey "^[[3~"  delete-char     # Delete key
 bindkey "^[3;5~" delete-char     # Delete key some other keyboards
 
-export EDITOR=vim
+export EDITOR=nvim
 export LESSHISTFILE=/dev/null
 
 # History options
@@ -59,7 +61,7 @@ setopt hist_ignore_dups extended_history hist_find_no_dups
 export PROMPT="%B%F{blue}%2~%f%b %# "
 export RPROMPT="%(?..%B[%?]%b)%1(j.%F{green}%j%f.)"
 
-export PATH=/usr/local/bin:$PATH
+export PATH=$HOME/bin:$PATH:/usr/local/bin
 export GOPATH=$HOME/go
 
 # Directory history
