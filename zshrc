@@ -30,6 +30,7 @@ alias ff="find . -name"
 alias zed="nvim ~/.zshrc ; source ~/.zshrc"
 alias zled="nvim ~/.rcola/local/zshrc ; source ~/.rcola/local/zshrc"
 alias rez="source ~/.zshrc"
+alias hb=halibot
 
 uprc() {
   pushd ~/.rcola
@@ -63,6 +64,9 @@ export RPROMPT="%(?..%B[%?]%b)%1(j.%F{green}%j%f.)"
 
 export PATH=$HOME/bin:$PATH:/usr/local/bin
 export GOPATH=$HOME/go
+
+# Erlang flags
+export ERL_AFLAGS="-kernel shell_history enabled"
 
 # Directory history
 export DIRSTACKSIZE=20
