@@ -70,12 +70,12 @@ let mapleader = "-"
 
 " Highlight words under the cursor
 function! MatchUnderCursor()
-  if get(b:, 'cursor_match_id', 0) != 0
-    call matchdelete(b:cursor_match_id)
+  if exists('w:cursor_match_id')
+    silent! call matchdelete(w:cursor_match_id)
   endif
-
-  let b:cursor_match_id = matchadd('WordUnderCursor', '\<' . expand('<cword>') . '\>')
+  let w:cursor_match_id = matchadd('WordUnderCursor', '\<' . expand('<cword>') . '\>')
 endfunction
+au InsertChange * :call MatchUnderCursor()
 au CursorMoved * :call MatchUnderCursor()
 au CursorMovedI * :call MatchUnderCursor()
 highlight WordUnderCursor cterm=underline gui=underline
