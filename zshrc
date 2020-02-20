@@ -7,28 +7,27 @@ else
   LS_FLAGS="-G"
 fi
 
+VIM=nvim
+
 alias ls="ls $LS_FLAGS"
 alias l="ls $LS_FLAGS"
 alias la="ls -a $LS_FLAGS"
 alias ll="ls -l $LS_FLAGS"
 
 alias cp="cp -v"
-alias catdog="cp"
 alias p="pwd"
-alias v="nvim"
-alias vim="nvim"
+alias v="$VIM"
+alias vim="$VIM"
 
 alias g="git"
-alias frm="rm -rf"
 alias h="history"
 alias hgr="fc -l 0 -1 | grep"
 alias ocaml="rlwrap ocaml"
 
-alias diff="vimdiff"
 alias less="less -R"
-alias ff="find . -name"
-alias zed="nvim ~/.zshrc ; source ~/.zshrc"
-alias zled="nvim ~/.rcola/local/zshrc ; source ~/.rcola/local/zshrc"
+alias ff="find . -iname"
+alias zed="$VIM ~/.zshrc ; source ~/.zshrc"
+alias zled="$VIM ~/.rcola/local/zshrc ; source ~/.rcola/local/zshrc"
 alias rez="source ~/.zshrc"
 alias hb=halibot
 
@@ -40,23 +39,19 @@ uprc() {
   popd
 }
 
-vf() {
-  nvim `find . -name $1` $2 $3 $4 $5 $6 $7 $8 $9
-}
-
 # Key bindings
 bindkey -e
 bindkey "^[[3~"  delete-char     # Delete key
 bindkey "^[3;5~" delete-char     # Delete key some other keyboards
 
-export EDITOR=nvim
+export EDITOR=$VIM
 export LESSHISTFILE=/dev/null
 
 # History options
-export HISTFILE=~/.zhist
-export HISTSIZE=10000
-export SAVEHIST=10000
-setopt hist_ignore_dups extended_history hist_find_no_dups
+#export HISTFILE=~/.zhist
+#export HISTSIZE=10000
+#export SAVEHIST=10000
+#setopt hist_ignore_dups extended_history hist_find_no_dups
 
 # Prompt
 export PROMPT="%B%F{blue}%2~%f%b %# "
@@ -70,7 +65,6 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 
 # Directory history
 export DIRSTACKSIZE=20
-setopt autocd
 setopt auto_pushd pushd_minus pushd_silent
 alias dh="dirs -v"
 alias dhg="dirs -v | grep"
@@ -102,38 +96,6 @@ if [[ -n "$NVM_DIR" ]]; then
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
-
-# So beautiful, it's like a waterfall!
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
-alias -g .......='../../../../../..'
-alias -g ........='../../../../../../..'
-alias -g .........='../../../../../../../..'
-alias -g ..........='../../../../../../../../..'
-alias -g ...........='../../../../../../../../../..'
-alias -g ............='../../../../../../../../../../..'
-alias -g .............='../../../../../../../../../../../..'
-alias -g ..............='../../../../../../../../../../../../..'
-alias -g ...............='../../../../../../../../../../../../../..'
-alias -g ................='../../../../../../../../../../../../../../..'
-alias -g .................='../../../../../../../../../../../../../../../..'
-alias -g ..................='../../../../../../../../../../../../../../../../..'
-alias -g ...................='../../../../../../../../../../../../../../../../../..'
-alias -g ....................='../../../../../../../../../../../../../../../../../../..'
-alias -g .....................='../../../../../../../../../../../../../../../../../../../..'
-alias -g ......................='../../../../../../../../../../../../../../../../../../../../..'
-alias -g .......................='../../../../../../../../../../../../../../../../../../../../../..'
-alias -g ........................='../../../../../../../../../../../../../../../../../../../../../../..'
-alias -g .........................='../../../../../../../../../../../../../../../../../../../../../../../..'
-alias -g ..........................='../../../../../../../../../../../../../../../../../../../../../../../../..'
-alias -g ...........................='../../../../../../../../../../../../../../../../../../../../../../../../../..'
-alias -g ............................='../../../../../../../../../../../../../../../../../../../../../../../../../../..'
-alias -g .............................='../../../../../../../../../../../../../../../../../../../../../../../../../../../..'
-alias -g ..............................='../../../../../../../../../../../../../../../../../../../../../../../../../../../../..'
-alias -g ...............................='../../../../../../../../../../../../../../../../../../../../../../../../../../../../../..'
-alias -g ................................='../../../../../../../../../../../../../../../../../../../../../../../../../../../../../../..'
 
 # Load local options/overrides
 source $HOME/.rcola/local/zshrc

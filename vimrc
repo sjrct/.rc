@@ -57,6 +57,17 @@ au BufReadCmd *.jar,*.bundle call zip#Browse(expand("<amatch>"))
 
 " Tags for languages
 au FileType python setlocal tags=./tags,tags,$HOME/.vim/tags/python3
+au FileType kotlin setlocal tags=./tags,tags,$HOME/.vim/tags/kotlin
+
+" Help for different filetype
+au FileType sh,zsh,make,dockerfile setlocal keywordprg=:Man
+au FileType vim,help setlocal keywordprg=:help
+
+if has('nvim')
+  au TermOpen * setlocal keywordprg=:Man
+endif
+
+au FileType man setlocal linebreak
 
 " Move new help windows to right
 "au FileType help wincmd L | set bh=unload
@@ -73,12 +84,27 @@ function! MatchUnderCursor()
   if exists('w:cursor_match_id')
     silent! call matchdelete(w:cursor_match_id)
   endif
-  let w:cursor_match_id = matchadd('WordUnderCursor', '\<' . expand('<cword>') . '\>')
+  let w:cursor_match_id = matchadd('WordUnderCursor', '\V\<' . escape(expand('<cword>'), '\') . '\>', -1)
 endfunction
 au InsertChange * :call MatchUnderCursor()
 au CursorMoved * :call MatchUnderCursor()
 au CursorMovedI * :call MatchUnderCursor()
 highlight WordUnderCursor cterm=underline gui=underline
+
+" Scratch pad support
+function! Scratch()
+  let l:bufname = '\[scratch]'
+  if bufwinnr(l:bufname) != -1
+    exec 'b ' . l:bufname
+  else
+    new
+    exec 'file ' . l:bufname
+    setlocal buftype=nofile
+    setlocal bufhidden=hide
+    setlocal noswapfile
+  endif
+endfunction
+nnoremap <Leader>x :call Scratch()
 
 " Ignore arrow keys
 inoremap <left> <nop>
@@ -95,14 +121,31 @@ nnoremap <Leader>p :tabn<Cr>
 nnoremap <Leader>w :tabc<Cr>
 nnoremap <Leader>e :tabe<Cr>
 nnoremap <Leader>/ :LGrep 
-nnoremap <Leader>? :LGrep <cword>
+nnoremap <Leader>? :LGrep <C-R>=expand("<cword>")<Cr> -ws
 nnoremap <Leader>' :NERDTreeToggle<Cr>
 nnoremap <Leader>n :set nu! rnu!<Cr>
 nnoremap <Leader>] :tab <cword><Cr>
+nnoremap <Leader>u :MundoToggle<Cr>
+vnoremap @ y:@"<Cr>
 
-nnoremap <Leader>h :execute ":help " . expand("<cword>")<Cr>
+"nnoremap <Leader>h :execute ":help " . expand("<cword>")<Cr>
 
-"nnoremap <Leader>h ^
+" Terminal mode stuff
+function! TermStartup()
+  normal isource ~/.vim/termrc<Esc>
+  startinsert
+endfunction
+
+if has('nvim')
+  "autocmd TermOpen * call TermStartup
+  autocmd TermOpen * startinsert
+endif
+
+" Hopefully these are not too problematic
+tnoremap <Esc> <C-\><C-N> 
+tnoremap <C-W> <C-\><C-N><C-W>
+
+nnoremap <Leader>h ^
 "nnoremap <Leader>l $
 
 " Fixlist
@@ -134,7 +177,7 @@ command! -range -nargs=0 DoubleUnderline call s:CombineSelection(<line1>, <line2
 command! -range -nargs=0 Strikethrough   call s:CombineSelection(<line1>, <line2>, '0336')
 
 " Ignore these files in wildcard, autocomplete, ctrl-p, etc
-set wildignore+=*/site-packages/*,*/node_modules/*,*.pyc
+set wildignore+=*/site-packages/*,*/node_modules/*,*.pyc,*/build/*
 
 function! s:CombineSelection(line1, line2, cp)
   execute 'let char = "\u'.a:cp.'"'
@@ -154,6 +197,10 @@ let g:NERDTreeWinSize = 50
 
 " Gutentag options
 let g:gutentags_ctags_exclude = ['*mypy*']
+
+" Mundo opts
+let g:mundo_preview_bottom = 1
+let g:mundo_right = 1
 
 " Load local overrides/settings
 source $HOME/.rcola/local/vimrc

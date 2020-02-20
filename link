@@ -62,11 +62,18 @@ cd $INST/.vim/bundle
 clone_or_pull git://github.com/godlygeek/tabular.git
 clone_or_pull git://github.com/sjrct/detectindent.git
 clone_or_pull git://github.com/kien/ctrlp.vim.git
-clone_or_pull git://github.com/vim-scripts/vim-stylus.git
 clone_or_pull git://github.com/altercation/vim-colors-solarized.git
 clone_or_pull git://github.com/tpope/vim-fugitive.git
 clone_or_pull git://github.com/pangloss/vim-javascript.git
-# TODO bufexplorer, NERD_tree, python-imports (req. python-support.nvim?), seoul256.bim, vim-rhubarb?
+clone_or_pull git://github.com/preservim/nerdtree
+clone_or_pull git://github.com/jlanzarotta/bufexplorer
+clone_or_pull git://github.com/roxma/python-support.nvim
+clone_or_pull git://github.com/junegunn/seoul256.vim
+clone_or_pull git://github.com/vim-airline/vim-airline
+clone_or_pull git://github.com/Chiel92/vim-autoformat
+clone_or_pull git://github.com/wsdjeg/vim-fetch
+clone_or_pull git://github.com/ludovicchabant/vim-gutentags
+clone_or_pull git://github.com/simnalamburt/vim-mundo
 vim -u NONE -c "helptags vim-fugitive/doc" -c q
 
 # Install moonshine colorscheme
@@ -83,4 +90,3 @@ git config --global alias.lg '!git lg2'
 git config --global alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat'
 git config --global alias.go checkout
 git config --global alias.df 'diff --color'
-
