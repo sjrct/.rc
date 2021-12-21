@@ -14,8 +14,10 @@ syntax on
 "let g:solarized_termcolors=256
 "set bg=dark
 "colo solarized
-colo seoul256
+"colo seoul256
+colo moonshine
 set display=uhex
+set signcolumn=number
 
 " Tabbing options
 set ts=4 sw=4
@@ -26,6 +28,7 @@ set smartindent
 set smarttab
 set sr
 
+set backspace=indent,eol,start " Allow backspacing over things not inserted
 set showmatch matchtime=1   " Jump quickly back to matching parens et al
 set magic                   " Backslashes in regexes less necessary
 set ignorecase smartcase    " Smart casing for search
@@ -128,6 +131,21 @@ nnoremap <Leader>] :tab <cword><Cr>
 nnoremap <Leader>u :MundoToggle<Cr>
 vnoremap @ y:@"<Cr>
 
+" -t for hints in typescript
+"autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
+autocmd FileType javascript,javascriptreact,typescript,typescriptreact nnoremap <silent> K :call CocAction('doHover')<CR>
+autocmd FileType javascript,javascriptreact,typescript,typescriptreact nnoremap <silent> <C-]> <Plug>(coc-definition)
+
+nmap <silent> <leader>d <Plug>(coc-definition)
+nmap <silent> <leader>D <Plug>(coc-declaration)
+nmap <silent> <leader>t <Plug>(coc-type-definition)
+nmap <silent> <leader>r <Plug>(coc-references)
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <leader>do <Plug>(coc-codeaction)
+nmap <leader>rn <Plug>(coc-rename)
+inoremap <silent><expr> <c-@> coc#start()
+
 "nnoremap <Leader>h :execute ":help " . expand("<cword>")<Cr>
 
 " Terminal mode stuff
@@ -196,11 +214,25 @@ let g:detectindent_preferred_indent = 4
 let g:NERDTreeWinSize = 50
 
 " Gutentag options
+" Let CoC handle js/ts[x]
+"let g:gutentags_ctags_exclude = ['*mypy*', '*.js', '*.ts', '*.jsx', '*.tsx']
 let g:gutentags_ctags_exclude = ['*mypy*']
 
 " Mundo opts
 let g:mundo_preview_bottom = 1
 let g:mundo_right = 1
+
+" Syntastic options
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+
+let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint' ]
 
 " Load local overrides/settings
 source $HOME/.rcola/local/vimrc

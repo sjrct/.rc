@@ -7,7 +7,7 @@ else
   LS_FLAGS="-G"
 fi
 
-VIM=nvim
+VIM=vim
 
 alias ls="ls $LS_FLAGS"
 alias l="ls $LS_FLAGS"
