@@ -27,12 +27,12 @@ alias ocaml="rlwrap ocaml"
 alias less="less -R"
 alias ff="find . -iname"
 alias zed="$VIM ~/.zshrc ; source ~/.zshrc"
-alias zled="$VIM ~/.rcola/local/zshrc ; source ~/.rcola/local/zshrc"
+alias zled="$VIM ~/.rc/local/zshrc ; source ~/.rc/local/zshrc"
 alias rez="source ~/.zshrc"
 alias hb=halibot
 
 uprc() {
-  pushd ~/.rcola
+  pushd ~/.rc
   git add zshrc vimrc link
   git commit -m 'Update rc files'
   git push origin master
@@ -98,4 +98,4 @@ if [[ -n "$NVM_DIR" ]]; then
 fi
 
 # Load local options/overrides
-source $HOME/.rcola/local/zshrc
+source $HOME/.rc/local/zshrc

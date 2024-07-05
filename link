@@ -1,17 +1,19 @@
-#!/bin/zsh
+#!/bin/bash
 #
 # Install or update my RC files installation
 #
 
 set -e
 
+RC=$(dirname $(pwd)/$0)
 INST=$HOME
 if [[ -n $1 ]] ; then
   INST=$1
 fi
 echo Installing to $INST
+echo RC files located at $RC
 
-# Link .rcola files to true rc files
+# Link .rc files to true rc files
 if [[ ( -e $INST/.zshrc && ! -L $INST/.zshrc) \
   || ( -e $INST/.vimrc && ! -L $INST/.vimrc) ]] ;
   then
@@ -19,11 +21,11 @@ if [[ ( -e $INST/.zshrc && ! -L $INST/.zshrc) \
     exit 1
 fi
 
-[[ ! -L $INST/.zshrc ]] && ln -s $HOME/.rcola/zshrc $INST/.zshrc
-[[ ! -L $INST/.vimrc ]] && ln -s $HOME/.rcola/vimrc $INST/.vimrc
+[[ ! -L $INST/.zshrc ]] && ln -s $RC/zshrc $INST/.zshrc
+[[ ! -L $INST/.vimrc ]] && ln -s $RC/vimrc $INST/.vimrc
 
 # Tell git that local rc file changes can be ignored
-git -C $HOME/.rcola update-index --assume-unchanged local/*
+git -C $RC update-index --assume-unchanged local/*
 
 # Make vim directories
 mkdir -p $INST/.vim/autoload
@@ -33,51 +35,29 @@ mkdir -p $INST/.vim/undo
 mkdir -p $INST/.vim/swap
 mkdir -p $INST/.vim/ftplugin
 
-# Link vim files
-function link_vimfile() {
-  if link
-  echo Linking $HOME/.rcola/vim/$1 to $INST/.vim/$1
-  [[ ! -e $HOME/.vim/$1 ]] && ln -s $(pwd)/$1 $HOME/.vim/$1
-}
-
-pushd $HOME/.rcola/vim
-find . -type f -exec zsh -c 'link_vimfile "$0"' {}  \;
-popd
-
 # Install vim pathogen
-curl -LSso $INST/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+curl -LSso $INST/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-# Install vim pathogen modules
-function clone_or_pull() {
-  repo=$(basename ${1%.git})
-  if [[ -e $repo ]] ; then
-    echo "Updating $repo..."
-    git -C $repo pull
-  else
-    git clone $1
-  fi
-}
-
-cd $INST/.vim/bundle
+#cd $INST/.vim/bundle
 # TODO switch to plug
-clone_or_pull git://github.com/godlygeek/tabular.git
-clone_or_pull git://github.com/sjrct/detectindent.git
-clone_or_pull git://github.com/kien/ctrlp.vim.git
-clone_or_pull git://github.com/altercation/vim-colors-solarized.git
-clone_or_pull git://github.com/tpope/vim-fugitive.git
-clone_or_pull git://github.com/pangloss/vim-javascript.git
-clone_or_pull git://github.com/preservim/nerdtree
-clone_or_pull git://github.com/jlanzarotta/bufexplorer
-clone_or_pull git://github.com/roxma/python-support.nvim
-clone_or_pull git://github.com/junegunn/seoul256.vim
-clone_or_pull git://github.com/vim-airline/vim-airline
-clone_or_pull git://github.com/Chiel92/vim-autoformat
-clone_or_pull git://github.com/wsdjeg/vim-fetch
-clone_or_pull git://github.com/ludovicchabant/vim-gutentags
-clone_or_pull git://github.com/simnalamburt/vim-mundo
-clone_or_pull git://github.com/neoclide/coc.nvim.git
-clone_or_pull git://github.com/peitalin/vim-jsx-typescript.git
-vim -u NONE -c "helptags vim-fugitive/doc" -c q
+#clone_or_pull git://github.com/godlygeek/tabular.git
+#clone_or_pull git://github.com/sjrct/detectindent.git
+#clone_or_pull git://github.com/kien/ctrlp.vim.git
+#clone_or_pull git://github.com/altercation/vim-colors-solarized.git
+#clone_or_pull git://github.com/tpope/vim-fugitive.git
+#clone_or_pull git://github.com/pangloss/vim-javascript.git
+#clone_or_pull git://github.com/preservim/nerdtree
+#clone_or_pull git://github.com/jlanzarotta/bufexplorer
+#clone_or_pull git://github.com/roxma/python-support.nvim
+#clone_or_pull git://github.com/junegunn/seoul256.vim
+#clone_or_pull git://github.com/vim-airline/vim-airline
+#clone_or_pull git://github.com/Chiel92/vim-autoformat
+#clone_or_pull git://github.com/wsdjeg/vim-fetch
+#clone_or_pull git://github.com/ludovicchabant/vim-gutentags
+#clone_or_pull git://github.com/simnalamburt/vim-mundo
+#clone_or_pull git://github.com/neoclide/coc.nvim.git
+#clone_or_pull git://github.com/peitalin/vim-jsx-typescript.git
+#vim -u NONE -c "helptags vim-fugitive/doc" -c q
 
 # Install moonshine colorscheme
 curl -LSso $INST/.vim/colors/moonshine.vim https://raw.githubusercontent.com/KKPMW/moonshine-vim/master/colors/moonshine.vim
@@ -91,5 +71,8 @@ git config --global alias.lg1 "log --graph --abbrev-commit --decorate --format=f
 git config --global alias.lg2 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
 git config --global alias.lg '!git lg2'
 git config --global alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat'
-git config --global alias.go checkout
+git config --global alias.co checkout
+git config --global alias.cm commit
+git config --global alias.a add
+git config --global alias.d 'diff --color'
 git config --global alias.df 'diff --color'

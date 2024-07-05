@@ -5,17 +5,27 @@ if has('nvim')
   let &packpath = &runtimepath
 endif
 
-execute pathogen#infect()
-Helptags
+call plug#begin()
+Plug 'godlygeek/tabular'
+Plug 'sjrct/detectindent'
+Plug 'kien/ctrlp.vim'
+Plug 'altercation/vim-colors-solarized'
+Plug 'tpope/vim-fugitive'
+Plug 'pangloss/vim-javascript'
+Plug 'preservim/nerdtree'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'vim-airline/vim-airline'
+Plug 'Chiel92/vim-autoformat'
+Plug 'wsdjeg/vim-fetch'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'simnalamburt/vim-mundo'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'peitalin/vim-jsx-typescript'
+call plug#end()
 
 " Appearance options
 set nu rnu
 syntax on
-"let g:solarized_termcolors=256
-"set bg=dark
-"colo solarized
-"colo seoul256
-colo moonshine
 set display=uhex
 set signcolumn=number
 
@@ -235,4 +245,4 @@ let g:mundo_right = 1
 let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint' ]
 
 " Load local overrides/settings
-source $HOME/.rcola/local/vimrc
+source $HOME/.rc/local/vimrc
