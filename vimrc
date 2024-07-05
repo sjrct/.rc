@@ -51,6 +51,9 @@ set cul
 set autowrite
 set hidden
 
+set directory=$HOME/.vim/tmp
+set backupdir=$HOME/.vim/tmp
+
 " Undo history
 set undofile
 set undodir=$HOME/.vim/undo

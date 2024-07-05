@@ -32,7 +32,7 @@ mkdir -p $INST/.vim/autoload
 mkdir -p $INST/.vim/bundle
 mkdir -p $INST/.vim/colors
 mkdir -p $INST/.vim/undo
-mkdir -p $INST/.vim/swap
+mkdir -p $INST/.vim/tmp
 mkdir -p $INST/.vim/ftplugin
 
 # Install vim pathogen
