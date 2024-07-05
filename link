@@ -38,27 +38,6 @@ mkdir -p $INST/.vim/ftplugin
 # Install vim pathogen
 curl -LSso $INST/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-#cd $INST/.vim/bundle
-# TODO switch to plug
-#clone_or_pull git://github.com/godlygeek/tabular.git
-#clone_or_pull git://github.com/sjrct/detectindent.git
-#clone_or_pull git://github.com/kien/ctrlp.vim.git
-#clone_or_pull git://github.com/altercation/vim-colors-solarized.git
-#clone_or_pull git://github.com/tpope/vim-fugitive.git
-#clone_or_pull git://github.com/pangloss/vim-javascript.git
-#clone_or_pull git://github.com/preservim/nerdtree
-#clone_or_pull git://github.com/jlanzarotta/bufexplorer
-#clone_or_pull git://github.com/roxma/python-support.nvim
-#clone_or_pull git://github.com/junegunn/seoul256.vim
-#clone_or_pull git://github.com/vim-airline/vim-airline
-#clone_or_pull git://github.com/Chiel92/vim-autoformat
-#clone_or_pull git://github.com/wsdjeg/vim-fetch
-#clone_or_pull git://github.com/ludovicchabant/vim-gutentags
-#clone_or_pull git://github.com/simnalamburt/vim-mundo
-#clone_or_pull git://github.com/neoclide/coc.nvim.git
-#clone_or_pull git://github.com/peitalin/vim-jsx-typescript.git
-#vim -u NONE -c "helptags vim-fugitive/doc" -c q
-
 # Install moonshine colorscheme
 curl -LSso $INST/.vim/colors/moonshine.vim https://raw.githubusercontent.com/KKPMW/moonshine-vim/master/colors/moonshine.vim
 
