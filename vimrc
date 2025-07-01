@@ -50,6 +50,7 @@ set ruler
 set cul
 set autowrite
 set hidden
+set re=2                    " Use new regex engine
 
 set directory=$HOME/.vim/tmp
 set backupdir=$HOME/.vim/tmp
@@ -195,8 +196,8 @@ nnoremap <Leader>iP :ImportNameHere<Cr>
 " Custom commands
 command! Ev e $MYVIMRC
 command! Sv so $MYVIMRC
-command! Elv e $HOME/.rcola/local/vimrc
-command! Slv so $HOME/.rcola/local/vimrc
+command! Elv e $HOME/.rc/local/vimrc
+command! Slv so $HOME/.rc/local/vimrc
 command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
 command! -nargs=+ -complete=function LGrep lgrep! <args> | lopen
 command! -nargs=+ Help tab :help <args>
