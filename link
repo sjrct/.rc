@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Install or update my RC files installation
+# I try to make this idempotent, so that you (I) can rerun it fine
 #
 
 set -e
@@ -35,11 +36,13 @@ mkdir -p $INST/.vim/undo
 mkdir -p $INST/.vim/tmp
 mkdir -p $INST/.vim/ftplugin
 
-# Install vim pathogen
-curl -LSso $INST/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+# Install vim plug
+[[ ! -e $INST/.vim/autoload/plug.vim ]] && \
+  curl -LSso $INST/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # Install moonshine colorscheme
-curl -LSso $INST/.vim/colors/moonshine.vim https://raw.githubusercontent.com/KKPMW/moonshine-vim/master/colors/moonshine.vim
+[[ ! -L $INST/.vim/colors/moonshine.vim ]] && \
+  ln -s $RC/moonshine.vim $INST/.vim/colors/moonshine.vim
 
 # Generic git config stuff
 #   Credits:
