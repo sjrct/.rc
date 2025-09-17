@@ -1,11 +1,11 @@
 # Aliases
-if ls --color 2> /dev/null > /dev/null ; then
-  # GNU ls
-  LS_FLAGS="--color --group-directories-first"
-else
-  # BSD/Mac ls
-  LS_FLAGS="-G"
-fi
+#if [ "$OSTYPE" == linux-gnu ]; then
+#  # GNU ls
+#  LS_FLAGS="--color --group-directories-first"
+#else
+#  # BSD/Mac ls
+#  LS_FLAGS="-G"
+#fi
 
 VIM=vim
 

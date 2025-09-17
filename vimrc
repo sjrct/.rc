@@ -21,6 +21,8 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'simnalamburt/vim-mundo'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'peitalin/vim-jsx-typescript'
+Plug 'ap/vim-css-color'
+Plug 'leviosa42/kanagawa-mini.vim'
 call plug#end()
 
 " Load local overrides/settings
@@ -41,6 +43,7 @@ set smartindent
 "set inde=''      " Turn off annoying reidenting of current line
 set smarttab
 set sr
+set history=500
 
 set backspace=indent,eol,start " Allow backspacing over things not inserted
 set showmatch matchtime=1   " Jump quickly back to matching parens et al
@@ -111,7 +114,7 @@ endfunction
 au InsertChange * :call MatchUnderCursor()
 au CursorMoved * :call MatchUnderCursor()
 au CursorMovedI * :call MatchUnderCursor()
-highlight WordUnderCursor cterm=underline gui=underline
+highlight WordUnderCursor ctermfg=123 cterm=none gui=underline
 
 " Scratch pad support
 function! Scratch()
@@ -137,6 +140,12 @@ inoremap <left> <nop>
 inoremap <right> <nop>
 inoremap <up> <nop>
 inoremap <down> <nop>
+
+" Have Y work like D
+noremap Y y$
+
+" Emacs-like shortcuts in command line mode...
+cnoremap <C-A> <C-B>
 
 " Custom shortcuts
 nnoremap <Leader>c :set cuc!<Cr>
@@ -240,6 +249,26 @@ let g:mundo_right = 1
 let g:c_syntax_for_h = 1
 
 let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint' ]
+
+if has("gui_macvim")
+  " Press Ctrl-Tab to switch between open tabs (like browser tabs) to 
+  " the right side. Ctrl-Shift-Tab goes the other way.
+  noremap <C-Tab> :tabnext<CR>
+  noremap <C-S-Tab> :tabprev<CR>
+
+  " Switch to specific tab numbers with Command-number
+  noremap <D-1> :tabn 1<CR>
+  noremap <D-2> :tabn 2<CR>
+  noremap <D-3> :tabn 3<CR>
+  noremap <D-4> :tabn 4<CR>
+  noremap <D-5> :tabn 5<CR>
+  noremap <D-6> :tabn 6<CR>
+  noremap <D-7> :tabn 7<CR>
+  noremap <D-8> :tabn 8<CR>
+  noremap <D-9> :tabn 9<CR>
+  " Command-0 goes to the last tab
+  noremap <D-0> :tablast<CR>
+endif
 
 " Load local overrides/settings
 " Don't put color schemes here...
