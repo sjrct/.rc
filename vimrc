@@ -7,7 +7,7 @@ endif
 
 call plug#begin()
 Plug 'godlygeek/tabular'
-Plug 'sjrct/detectindent'
+Plug 'lambdalisue/vim-findent'
 Plug 'kien/ctrlp.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-fugitive'
@@ -22,6 +22,10 @@ Plug 'simnalamburt/vim-mundo'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'peitalin/vim-jsx-typescript'
 call plug#end()
+
+" Load local overrides/settings
+" Put local color schemes in this one...
+source $HOME/.rc/local/vimrc-early
 
 " Appearance options
 set nu rnu
@@ -51,6 +55,7 @@ set cul
 set autowrite
 set hidden
 set re=2                    " Use new regex engine
+set wildmenu
 
 set directory=$HOME/.vim/tmp
 set backupdir=$HOME/.vim/tmp
@@ -123,6 +128,10 @@ function! Scratch()
 endfunction
 nnoremap <Leader>x :call Scratch()
 
+" C-E to insert first match during completion
+" Needs to be not nore bc this is interacting with CoC completion
+imap <C-E> <C-N><C-P>
+
 " Ignore arrow keys
 inoremap <left> <nop>
 inoremap <right> <nop>
@@ -156,8 +165,8 @@ nmap <silent> <leader>t <Plug>(coc-type-definition)
 nmap <silent> <leader>r <Plug>(coc-references)
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
-nmap <leader>do <Plug>(coc-codeaction)
-nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>a <Plug>(coc-codeaction)
+nmap <leader>R <Plug>(coc-rename)
 inoremap <silent><expr> <c-@> coc#start()
 
 "nnoremap <Leader>h :execute ":help " . expand("<cword>")<Cr>
@@ -177,76 +186,61 @@ endif
 tnoremap <Esc> <C-\><C-N> 
 tnoremap <C-W> <C-\><C-N><C-W>
 
-nnoremap <Leader>h ^
-"nnoremap <Leader>l $
-
 " Fixlist
 nnoremap <Leader>F :lopen<Cr>
 nnoremap <Leader>f :lnext<Cr>
 
 " Git commands
-nnoremap <Leader>gb :Gblame<Cr>
-nnoremap <Leader>gd :Gdiff<Cr>
-nnoremap <Leader>gl :Gllog<Cr>:lopen<Cr>
-
-" Python import commands
-nnoremap <Leader>ip :ImportName<Cr>
-nnoremap <Leader>iP :ImportNameHere<Cr>
+nnoremap <Leader>g  :Git 
+nnoremap <Leader>gb :Git blame<Cr>
+nnoremap <Leader>gd :Git diff<Cr>
+nnoremap <Leader>gl :Git log<Cr>:lopen<Cr>
 
 " Custom commands
 command! Ev e $MYVIMRC
 command! Sv so $MYVIMRC
-command! Elv e $HOME/.rc/local/vimrc
+command! Elve e $HOME/.rc/local/vimrc-early
+command! Elv e $HOME/.rc/local/vimrc-late
 command! Slv so $HOME/.rc/local/vimrc
 command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
 command! -nargs=+ -complete=function LGrep lgrep! <args> | lopen
 command! -nargs=+ Help tab :help <args>
 
 " modify selected text using combining diacritics
+" https://vim.fandom.com/wiki/Create_underlines,_overlines,_and_strikethroughs_using_combining_characters
 command! -range -nargs=0 Overline        call s:CombineSelection(<line1>, <line2>, '0305')
 command! -range -nargs=0 Underline       call s:CombineSelection(<line1>, <line2>, '0332')
 command! -range -nargs=0 DoubleUnderline call s:CombineSelection(<line1>, <line2>, '0333')
 command! -range -nargs=0 Strikethrough   call s:CombineSelection(<line1>, <line2>, '0336')
-
-" Ignore these files in wildcard, autocomplete, ctrl-p, etc
-set wildignore+=*/site-packages/*,*/node_modules/*,*.pyc,*/build/*
 
 function! s:CombineSelection(line1, line2, cp)
   execute 'let char = "\u'.a:cp.'"'
   execute a:line1.','.a:line2.'s/\%V[^[:cntrl:]]/&'.char.'/ge'
 endfunction
 
+" Ignore these files in wildcard, autocomplete, ctrl-p, etc
+set wildignore+=*/site-packages/*,*/node_modules/*,*.pyc,*/build/*
+
 set laststatus=2
 set showtabline=2
 
-" DetectIndent plugin settings
-au BufReadPost * :DetectIndent
-let g:detectindent_preferred_expandtab = 0
-let g:detectindent_preferred_indent = 4
+" Indentation detection
+au BufReadPost * :Findent --no-messages --no-warnings
 
 " Nerd tree options
 let g:NERDTreeWinSize = 50
 
 " Gutentag options
-" Let CoC handle js/ts[x]
-"let g:gutentags_ctags_exclude = ['*mypy*', '*.js', '*.ts', '*.jsx', '*.tsx']
 let g:gutentags_ctags_exclude = ['*mypy*']
 
 " Mundo opts
 let g:mundo_preview_bottom = 1
 let g:mundo_right = 1
 
-" Syntastic options
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
+let g:c_syntax_for_h = 1
 
 let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint' ]
 
 " Load local overrides/settings
-source $HOME/.rc/local/vimrc
+" Don't put color schemes here...
+source $HOME/.rc/local/vimrc-late
