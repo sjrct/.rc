@@ -20,6 +20,7 @@ Plug 'wsdjeg/vim-fetch'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'simnalamburt/vim-mundo'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'posva/vim-vue'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'ap/vim-css-color'
 Plug 'leviosa42/kanagawa-mini.vim'
@@ -36,7 +37,7 @@ set display=uhex
 set signcolumn=number
 
 " Tabbing options
-set ts=4 sw=4
+set ts=2 sw=2
 set expandtab
 set autoindent
 set smartindent
@@ -129,7 +130,7 @@ function! Scratch()
     setlocal noswapfile
   endif
 endfunction
-nnoremap <Leader>x :call Scratch()
+nnoremap <Leader>X :call Scratch()
 
 " C-E to insert first match during completion
 " Needs to be not nore bc this is interacting with CoC completion
