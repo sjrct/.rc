@@ -18,43 +18,37 @@ Plug 'vim-airline/vim-airline'
 Plug 'Chiel92/vim-autoformat'
 Plug 'wsdjeg/vim-fetch'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'simnalamburt/vim-mundo'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'posva/vim-vue'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'ap/vim-css-color'
+Plug 'leviosa42/kanagawa-mini.vim'
 
 if has('nvim')
-  "Plug 'PhilRunninger/bufselect'
+  Plug 'rebelot/kanagawa.nvim'
   Plug 'mistweaverco/bafa.nvim'
     Plug 'nvim-tree/nvim-web-devicons'
-  Plug 'rebelot/kanagawa.nvim'
-  Plug 'leviosa42/kanagawa-mini.vim'
+  Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
+    Plug 'nvim-lua/plenary.nvim'
+  Plug 'jiaoshijie/undotree'
+    Plug 'nvim-lua/plenary.nvim'
+  Plug 'folke/which-key.nvim'
+
   Plug 'LunarVim/bigfile.nvim'
 else
-  Plug 'leviosa42/kanagawa-mini.vim'
   Plug 'PhilRunninger/bufselect', { 'branch': 'vim-compatible' }
+  Plug 'simnalamburt/vim-mundo'
 endif
 
 call plug#end()
 
-" Load local overrides/settings
-" Put local color schemes in this one...
-source $HOME/.rc/local/vimrc-early
-
 " Appearance options
 set nu rnu
 syntax on
-set display=uhex
-set signcolumn=number
+set display=uhex      " Show unprintable characters as <xx>
 
 " If the terminal doesn't support true color... no luck
-if has('nvim')
-  color kanagawa
-  colo kanagawa-mini
-else
-  colo kanagawa-mini
-endif
+colo kanagawa-mini
 set termguicolors
 
 hi DiagnosticUnderlineError cterm=undercurl gui=undercurl
@@ -67,7 +61,6 @@ set ts=2 sw=2
 set expandtab
 set autoindent
 set smartindent
-"set inde=''      " Turn off annoying reidenting of current line
 set smarttab
 set sr
 set history=500
@@ -78,7 +71,6 @@ set magic                   " Backslashes in regexes less necessary
 set ignorecase smartcase    " Smart casing for search
 set dir=$HOME/.vim/swap     " Swap file location
 set mouse=n                 " Mouse enabled in normal mode
-set keywordprg=:help        " K uses :help
 set grepprg=rg\ --vimgrep
 set ruler
 set cul
@@ -86,6 +78,7 @@ set autowrite
 set hidden
 set re=2                    " Use new regex engine
 set wildmenu
+set splitright splitbelow
 
 set directory=$HOME/.vim/tmp
 set backupdir=$HOME/.vim/tmp
@@ -114,8 +107,9 @@ au FileType python setlocal tags=./tags,tags,$HOME/.vim/tags/python3
 au FileType kotlin setlocal tags=./tags,tags,$HOME/.vim/tags/kotlin
 
 " Help for different filetype
-au FileType sh,zsh,make,dockerfile setlocal keywordprg=:Man
+au FileType sh,zsh,make,dockerfile,c,cpp setlocal keywordprg=:Man
 au FileType vim,help setlocal keywordprg=:help
+au FileType help wincmd L
 
 if has('nvim')
   au TermOpen * setlocal keywordprg=:Man
@@ -158,7 +152,7 @@ function! Scratch()
     setlocal noswapfile
   endif
 endfunction
-nnoremap <Leader>px :call Scratch()
+nnoremap <Leader>-x :call Scratch()
 
 " C-E to insert first match during completion
 " Needs to be not nore bc this is interacting with CoC completion
@@ -180,8 +174,8 @@ noremap Y y$
 cnoremap <C-A> <C-B>
 
 " Custom shortcuts
-nnoremap <Leader>c :set cuc!<Cr>
-nnoremap <Leader>l :set cul!<Cr>
+nnoremap <Leader>-c :set cuc!<Cr>
+nnoremap <Leader>-l :set cul!<Cr>
 nnoremap <Leader>s :set hls!<Cr>
 nnoremap <Leader>o :tabp<Cr>
 nnoremap <Leader>p :tabn<Cr>
@@ -192,13 +186,8 @@ nnoremap <Leader>? :LGrep <C-R>=expand("<cword>")<Cr> -ws
 nnoremap <Leader>' :NERDTreeToggle<Cr>
 nnoremap <Leader>n :set nu! rnu!<Cr>
 nnoremap <Leader>] :tab <cword><Cr>
-nnoremap <Leader>u :MundoToggle<Cr>
 nnoremap <Leader>m :make\|cwindow<Cr>
 vnoremap @ y:@"<Cr>
-nnoremap @ Vy:@"<Cr><Esc>
-
-" Fuzz finder... throwback
-nnoremap <C-P> :FZF<Cr>
 
 " -t for hints in typescript
 "autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
@@ -227,28 +216,26 @@ if has('nvim')
 endif
 
 " Hopefully these are not too problematic
-tnoremap <Esc> <C-\><C-N> 
-tnoremap <C-W> <C-\><C-N><C-W>
+if has('nvim')
+  tnoremap <Esc> <C-\><C-N>
+  tnoremap <C-W> <C-\><C-N><C-W>
+endif
 
 " location list
-nnoremap <Leader>X :cwindow<Cr>
-nnoremap <Leader>x :cnext<Cr>
-nnoremap <Leader>F :lwindow<Cr>
-nnoremap <Leader>f :lnext<Cr>
-
+nnoremap <Leader>C :cwindow<Cr>
+nnoremap <Leader>c :cnext<Cr>
+nnoremap <Leader>X :lwindow<Cr>
+nnoremap <Leader>x :lnext<Cr>
 
 " Git commands
 nnoremap <Leader>g  :Git 
 nnoremap <Leader>gb :Git blame<Cr>
-nnoremap <Leader>gd :Git diff<Cr>
-nnoremap <Leader>gl :Git log<Cr>:lopen<Cr>
+nnoremap <Leader>gd :Gvdiffsplit<Cr>
+nnoremap <Leader>gl :Git log<Cr>
 
 " Custom commands
 command! Ev e $MYVIMRC
 command! Sv so $MYVIMRC
-command! Elve e $HOME/.rc/local/vimrc-early
-command! Elv e $HOME/.rc/local/vimrc-late
-command! Slv so $HOME/.rc/local/vimrc
 command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
 command! -nargs=+ -complete=function  Grep  grep! <args> | copen
 command! -nargs=+ -complete=function LGrep lgrep! <args> | lopen
@@ -282,20 +269,37 @@ let g:NERDTreeWinSize = 50
 let g:gutentags_ctags_exclude = ['*mypy*']
 
 " Mundo opts
-let g:mundo_preview_bottom = 1
-let g:mundo_right = 1
+" Undo tree
+if has('nvim')
+  lua require('undotree').setup({ window = { winblend = 10 }})
+  "hi link UndotreeDiffAdded DiffAdd
+  "hi link UndotreeDiffRemoved DiffDelete
+  nnoremap <silent> <Leader>u :lua require('undotree').toggle()<cr>
+else
+  nnoremap <silent> <Leader>u :MundoToggle<Cr>
+  let g:mundo_preview_bottom = 1
+  let g:mundo_right = 1
+endif
 
 let g:c_syntax_for_h = 1
 
 let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint' ]
 
-" buffer list thing, whatever it is...
+" Fuzzy tools, buffer lists, etc
 if has('nvim')
   nnoremap <silent> <leader>b :lua require('bafa.ui').toggle()<cr>
+
+  nnoremap <leader>ff <cmd>Telescope find_files<cr>
+  nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+  nnoremap <leader>fb <cmd>Telescope buffers<cr>
+  nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 else
   nnoremap <silent> <leader>b :ShowBufferList<CR>
 endif
 
+nnoremap <C-P> :FZF<Cr>
+
+" macvim bindings
 if has("gui_macvim")
   " Press Ctrl-Tab to switch between open tabs (like browser tabs) to 
   " the right side. Ctrl-Shift-Tab goes the other way.
@@ -315,7 +319,3 @@ if has("gui_macvim")
   " Command-0 goes to the last tab
   noremap <D-0> :tablast<CR>
 endif
-
-" Load local overrides/settings
-" Don't put color schemes here...
-source $HOME/.rc/local/vimrc-late
