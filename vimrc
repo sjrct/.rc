@@ -33,7 +33,6 @@ if has('nvim')
   Plug 'jiaoshijie/undotree'
     Plug 'nvim-lua/plenary.nvim'
   Plug 'folke/which-key.nvim'
-
   Plug 'LunarVim/bigfile.nvim'
 else
   Plug 'PhilRunninger/bufselect', { 'branch': 'vim-compatible' }
@@ -48,7 +47,11 @@ syntax on
 set display=uhex      " Show unprintable characters as <xx>
 
 " If the terminal doesn't support true color... no luck
-colo kanagawa-mini
+if has('nvim')
+  colo kanagawa
+else
+  colo kanagawa-mini
+endif
 set termguicolors
 
 hi DiagnosticUnderlineError cterm=undercurl gui=undercurl
@@ -272,8 +275,6 @@ let g:gutentags_ctags_exclude = ['*mypy*']
 " Undo tree
 if has('nvim')
   lua require('undotree').setup({ window = { winblend = 10 }})
-  "hi link UndotreeDiffAdded DiffAdd
-  "hi link UndotreeDiffRemoved DiffDelete
   nnoremap <silent> <Leader>u :lua require('undotree').toggle()<cr>
 else
   nnoremap <silent> <Leader>u :MundoToggle<Cr>
@@ -301,7 +302,7 @@ nnoremap <C-P> :FZF<Cr>
 
 " macvim bindings
 if has("gui_macvim")
-  " Press Ctrl-Tab to switch between open tabs (like browser tabs) to 
+  " Press Ctrl-Tab to switch between open tabs (like browser tabs) to
   " the right side. Ctrl-Shift-Tab goes the other way.
   noremap <C-Tab> :tabnext<CR>
   noremap <C-S-Tab> :tabprev<CR>
