@@ -16,14 +16,16 @@ echo RC files located at $RC
 
 # Link .rc files to true rc files
 if [[ ( -e $INST/.zshrc && ! -L $INST/.zshrc) \
-  || ( -e $INST/.vimrc && ! -L $INST/.vimrc) ]] ;
+  || ( -e $INST/.vimrc && ! -L $INST/.vimrc) \
+  || ( -e $INST/.config/fish/config.fish && ! -L $INST/.config/fish/config.fish) ]]
   then
-    echo "Non-symlinked .zshrc and .vimrc already exists!\nCannot install!"
+    echo -e "Non-symlinked .zshrc and .vimrc already exists!\nCannot install!"
     exit 1
 fi
 
 [[ ! -L $INST/.zshrc ]] && ln -s $RC/zshrc $INST/.zshrc
 [[ ! -L $INST/.vimrc ]] && ln -s $RC/vimrc $INST/.vimrc
+[[ ! -L $INST/.config/fish/config.fish ]] && ln -s $RC/fish/config.fish $INST/.config/fish/config.fish
 
 # Tell git that local rc file changes can be ignored
 git -C $RC update-index --assume-unchanged local/*

@@ -8,12 +8,12 @@ endif
 call plug#begin()
 Plug 'godlygeek/tabular'
 Plug 'lambdalisue/vim-findent'
-Plug 'kien/ctrlp.vim'
+Plug 'vim-fuzzbox/fuzzbox.vim'
 Plug 'altercation/vim-colors-solarized'
+Plug '/opt/homebrew/opt/fzf'
 Plug 'tpope/vim-fugitive'
 Plug 'pangloss/vim-javascript'
 Plug 'preservim/nerdtree'
-Plug 'jlanzarotta/bufexplorer'
 Plug 'vim-airline/vim-airline'
 Plug 'Chiel92/vim-autoformat'
 Plug 'wsdjeg/vim-fetch'
@@ -22,7 +22,19 @@ Plug 'simnalamburt/vim-mundo'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'ap/vim-css-color'
-Plug 'leviosa42/kanagawa-mini.vim'
+
+if has('nvim')
+  "Plug 'PhilRunninger/bufselect'
+  Plug 'mistweaverco/bafa.nvim'
+    Plug 'nvim-tree/nvim-web-devicons'
+  Plug 'rebelot/kanagawa.nvim'
+  Plug 'leviosa42/kanagawa-mini.vim'
+  Plug 'LunarVim/bigfile.nvim'
+else
+  Plug 'leviosa42/kanagawa-mini.vim'
+  Plug 'PhilRunninger/bufselect', { 'branch': 'vim-compatible' }
+endif
+
 call plug#end()
 
 " Load local overrides/settings
@@ -34,6 +46,20 @@ set nu rnu
 syntax on
 set display=uhex
 set signcolumn=number
+
+" If the terminal doesn't support true color... no luck
+if has('nvim')
+  color kanagawa
+  colo kanagawa-mini
+else
+  colo kanagawa-mini
+endif
+set termguicolors
+
+hi DiagnosticUnderlineError cterm=undercurl gui=undercurl
+hi DiagnosticUnderlineWarn  cterm=undercurl gui=undercurl
+hi DiagnosticUnderlineInfo  cterm=undercurl gui=undercurl
+hi DiagnosticUnderlineOk    cterm=undercurl gui=undercurl
 
 " Tabbing options
 set ts=4 sw=4
@@ -52,7 +78,7 @@ set ignorecase smartcase    " Smart casing for search
 set dir=$HOME/.vim/swap     " Swap file location
 set mouse=n                 " Mouse enabled in normal mode
 set keywordprg=:help        " K uses :help
-set grepprg=ag              " Use the silver searcher for :grep
+set grepprg=rg\ --vimgrep
 set ruler
 set cul
 set autowrite
@@ -65,7 +91,9 @@ set backupdir=$HOME/.vim/tmp
 
 " Undo history
 set undofile
-set undodir=$HOME/.vim/undo
+if !has('nvim')
+  set undodir=$HOME/.vim/undo
+endif
 
 "set tags=./tags;
 
@@ -98,7 +126,7 @@ au FileType man setlocal linebreak
 "au FileType help wincmd L | set bh=unload
 
 " Highlight extra whitespace
-highlight ExtraWhitespace ctermbg=red guibg=red
+highlight ExtraWhitespace ctermbg=167 guibg=#C34043
 match ExtraWhitespace /\s\+$\| \+\ze\t/
 
 " Prefix for custom shortcuts
@@ -112,9 +140,9 @@ function! MatchUnderCursor()
   let w:cursor_match_id = matchadd('WordUnderCursor', '\V\<' . escape(expand('<cword>'), '\') . '\>', -1)
 endfunction
 au InsertChange * :call MatchUnderCursor()
-au CursorMoved * :call MatchUnderCursor()
+au CursorMoved  * :call MatchUnderCursor()
 au CursorMovedI * :call MatchUnderCursor()
-highlight WordUnderCursor ctermfg=123 cterm=none gui=underline
+highlight WordUnderCursor ctermfg=123 guifg=#afd7ff
 
 " Scratch pad support
 function! Scratch()
@@ -129,7 +157,7 @@ function! Scratch()
     setlocal noswapfile
   endif
 endfunction
-nnoremap <Leader>x :call Scratch()
+nnoremap <Leader>px :call Scratch()
 
 " C-E to insert first match during completion
 " Needs to be not nore bc this is interacting with CoC completion
@@ -140,6 +168,9 @@ inoremap <left> <nop>
 inoremap <right> <nop>
 inoremap <up> <nop>
 inoremap <down> <nop>
+
+" disable ex mode...
+nnoremap Q <nop>
 
 " Have Y work like D
 noremap Y y$
@@ -161,7 +192,12 @@ nnoremap <Leader>' :NERDTreeToggle<Cr>
 nnoremap <Leader>n :set nu! rnu!<Cr>
 nnoremap <Leader>] :tab <cword><Cr>
 nnoremap <Leader>u :MundoToggle<Cr>
+nnoremap <Leader>m :make\|cwindow<Cr>
 vnoremap @ y:@"<Cr>
+nnoremap @ Vy:@"<Cr><Esc>
+
+" Fuzz finder... throwback
+nnoremap <C-P> :FZF<Cr>
 
 " -t for hints in typescript
 "autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
@@ -178,8 +214,6 @@ nmap <leader>a <Plug>(coc-codeaction)
 nmap <leader>R <Plug>(coc-rename)
 inoremap <silent><expr> <c-@> coc#start()
 
-"nnoremap <Leader>h :execute ":help " . expand("<cword>")<Cr>
-
 " Terminal mode stuff
 function! TermStartup()
   normal isource ~/.vim/termrc<Esc>
@@ -195,9 +229,12 @@ endif
 tnoremap <Esc> <C-\><C-N> 
 tnoremap <C-W> <C-\><C-N><C-W>
 
-" Fixlist
-nnoremap <Leader>F :lopen<Cr>
+" location list
+nnoremap <Leader>X :cwindow<Cr>
+nnoremap <Leader>x :cnext<Cr>
+nnoremap <Leader>F :lwindow<Cr>
 nnoremap <Leader>f :lnext<Cr>
+
 
 " Git commands
 nnoremap <Leader>g  :Git 
@@ -212,6 +249,7 @@ command! Elve e $HOME/.rc/local/vimrc-early
 command! Elv e $HOME/.rc/local/vimrc-late
 command! Slv so $HOME/.rc/local/vimrc
 command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
+command! -nargs=+ -complete=function  Grep  grep! <args> | copen
 command! -nargs=+ -complete=function LGrep lgrep! <args> | lopen
 command! -nargs=+ Help tab :help <args>
 
@@ -249,6 +287,13 @@ let g:mundo_right = 1
 let g:c_syntax_for_h = 1
 
 let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint' ]
+
+" buffer list thing, whatever it is...
+if has('nvim')
+  nnoremap <silent> <leader>b :lua require('bafa.ui').toggle()<cr>
+else
+  nnoremap <silent> <leader>b :ShowBufferList<CR>
+endif
 
 if has("gui_macvim")
   " Press Ctrl-Tab to switch between open tabs (like browser tabs) to 
