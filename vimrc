@@ -20,6 +20,7 @@ Plug 'wsdjeg/vim-fetch'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'simnalamburt/vim-mundo'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'posva/vim-vue'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'ap/vim-css-color'
 
@@ -62,7 +63,7 @@ hi DiagnosticUnderlineInfo  cterm=undercurl gui=undercurl
 hi DiagnosticUnderlineOk    cterm=undercurl gui=undercurl
 
 " Tabbing options
-set ts=4 sw=4
+set ts=2 sw=2
 set expandtab
 set autoindent
 set smartindent

@@ -51,6 +51,7 @@ mkdir -p $INST/.vim/ftplugin
 #     lg1, lg2 - Slipp D. Thompson (stackoverflow)
 #     ll - durdn
 git config --global push.default current
+git config --global pull.rebase true
 git config --global alias.lg1 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
 git config --global alias.lg2 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
 git config --global alias.lg '!git lg2'
