@@ -140,7 +140,7 @@ endfunction
 au InsertChange * :call MatchUnderCursor()
 au CursorMoved  * :call MatchUnderCursor()
 au CursorMovedI * :call MatchUnderCursor()
-highlight WordUnderCursor ctermfg=123 guifg=#afd7ff
+highlight WordUnderCursor ctermfg=123 guifg=#A3D4D5 cterm=bold gui=bold
 
 " Scratch pad support
 function! Scratch()
@@ -194,8 +194,8 @@ vnoremap @ y:@"<Cr>
 
 " -t for hints in typescript
 "autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
-autocmd FileType javascript,javascriptreact,typescript,typescriptreact nnoremap <silent> K :call CocAction('doHover')<CR>
-autocmd FileType javascript,javascriptreact,typescript,typescriptreact nnoremap <silent> <C-]> <Plug>(coc-definition)
+"autocmd FileType javascript,javascriptreact,typescript,typescriptreact nnoremap <silent> K :call CocAction('doHover')<CR>
+"autocmd FileType javascript,javascriptreact,typescript,typescriptreact nnoremap <silent> <C-]> <Plug>(coc-definition)
 
 nmap <silent> <leader>d <Plug>(coc-definition)
 nmap <silent> <leader>D <Plug>(coc-declaration)
