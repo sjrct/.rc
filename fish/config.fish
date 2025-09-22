@@ -34,6 +34,17 @@ if status is-interactive
     alias ssh='kitten ssh'
   end
   #: }}}
+
+  if fisher --version &> /dev/null
+    function fi -a pkg
+      if not fisher list | grep $pkg &> /dev/null
+        fisher $pkg
+      end
+    end
+
+    fi patrickf1/fzf.fish
+    fi gazorby/fish-abbreviation-tips
+  end
 end
 
 #: Set EDITOR and MANPAGER {{{
@@ -61,14 +72,3 @@ end
 
 [ -e $HOME/.bin ] && fish_add_path $HOME/.bin
 [ -e $HOME/.cargo/bin ] && fish_add_path $HOME/.cargo/bin
-
-if which fisher &> /dev/null
-  function fi -a pkg
-    if not fisher list | grep $pkg
-      fisher $pkg
-    end
-  end
-
-  fi patrickf1/fzf.fish
-  fi gazorby/fish-abbreviation-tips
-end

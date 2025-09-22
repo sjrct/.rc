@@ -91,53 +91,56 @@ for rec in $recs
 end
 #: }}}
 
-# Configure information about where to install
-set RC (dirname $(pwd)/$0)
-set INST $HOME
-if [ -n $argv[1] ]
-  set INST $argv[1]
+begin
+  # Configure information about where to install
+  set RC (realpath (dirname (status -f)))
+  set INST $HOME
+  if [ (count $argv) -gt 0 ]
+    set INST $argv[1]
+  end
+  echo Installing to $INST
+  echo RC files located at $RC
+
+  try_link $RC/zshrc $INST/.zshrc
+  try_link $RC/vimrc $INST/.vimrc
+  try_link_r $RC/fish $INST/.config/fish
+  try_link_r $RC/nvim $INST/.config/nvim
+  try_link_r $RC/kitty $INST/.config/kitty
+
+  # Tell git that local rc file changes can be ignored
+  git -C $RC update-index --assume-unchanged local/*
+
+  # Make vim directories
+  mkdir -p $INST/.vim/autoload
+  mkdir -p $INST/.vim/colors
+  mkdir -p $INST/.vim/undo
+  mkdir -p $INST/.vim/tmp
+  mkdir -p $INST/.vim/ftplugin
+
+  # Install vim plug
+  set PLUG_URL https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  download_file $INST/.vim/autoload/plug.vim $PLUG_URL
+  download_file $INST/.local/share/nvim/site/autoload/plug.vim $PLUG_URL
+
+  # Install moonshine colorscheme
+  try_link $RC/moonshine.vim $INST/.vim/colors/moonshine.vim
+  try_link $RC/moonshine.vim $INST/.local/share/nvim/site/colors/moonshine.vim
+
+  # Generic git config stuff
+  #   Credits:
+  #     lg1, lg2 - Slipp D. Thompson (stackoverflow)
+  #     ll - durdn
+  git config --global push.default current
+  git config --global pull.rebase true
+  git config --global alias.lg1 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
+  git config --global alias.lg2 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
+  git config --global alias.lg '!git lg2'
+  git config --global alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat'
+  git config --global alias.co checkout
+  git config --global alias.cm commit
+  git config --global alias.a add
+  git config --global alias.d 'diff --color'
+  git config --global alias.df 'diff --color'
+  git config --global alias.s 'status'
+  git config --global alias.st 'status'
 end
-echo Installing to $INST
-echo RC files located at $RC
-
-try_link $RC/zshrc $INST/.zshrc
-try_link $RC/vimrc $INST/.vimrc
-try_link_r $RC/fish $INST/.config/fish
-try_link_r $RC/nvim $INST/.config/nvim
-
-# Tell git that local rc file changes can be ignored
-git -C $RC update-index --assume-unchanged local/*
-
-# Make vim directories
-mkdir -p $INST/.vim/autoload
-mkdir -p $INST/.vim/colors
-mkdir -p $INST/.vim/undo
-mkdir -p $INST/.vim/tmp
-mkdir -p $INST/.vim/ftplugin
-
-# Install vim plug
-set PLUG_URL https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-download_file $INST/.vim/autoload/plug.vim $PLUG_URL
-download_file $INST/.local/share/nvim/site/autoload/plug.vim $PLUG_URL
-
-# Install moonshine colorscheme
-try_link $RC/moonshine.vim $INST/.vim/colors/moonshine.vim
-try_link $RC/moonshine.vim $INST/.local/share/nvim/site/colors/moonshine.vim
-
-# Generic git config stuff
-#   Credits:
-#     lg1, lg2 - Slipp D. Thompson (stackoverflow)
-#     ll - durdn
-git config --global push.default current
-git config --global pull.rebase true
-git config --global alias.lg1 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
-git config --global alias.lg2 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
-git config --global alias.lg '!git lg2'
-git config --global alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat'
-git config --global alias.co checkout
-git config --global alias.cm commit
-git config --global alias.a add
-git config --global alias.d 'diff --color'
-git config --global alias.df 'diff --color'
-git config --global alias.s 'status'
-git config --global alias.st 'status'
