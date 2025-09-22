@@ -32,7 +32,7 @@ function download_file -a dest url
   if [ -e $ckpath ]
     and grep $tmp $ckpath
     # validate the file
-    if not grep $tmp $ckpath | sha1sum -c -
+    if not grep $tmp $ckpath | sha1sum -c - &> /dev/null
       echo "Invalid checksum for $path ($tmp)"
       exit 1
     end
@@ -60,12 +60,13 @@ function try_link -a from to
   else
     echo "Linking $from -> $to"
     echo $to >> installed_files
+    mkdir -p (dirname $to)
     ln -s $from $to
   end
 end
 
 function try_link_r -a from_dir to_dir
-  for file in (find $from_dir -type f -printf "%P\n")
+  for file in (find $from_dir -type f -exec basename '{}' \;)
     try_link $from_dir/$file $to_dir/$file
   end
 end
@@ -108,7 +109,7 @@ begin
   try_link_r $RC/kitty $INST/.config/kitty
 
   # Tell git that local rc file changes can be ignored
-  git -C $RC update-index --assume-unchanged local/*
+  #git -C $RC update-index --assume-unchanged local/*
 
   # Make vim directories
   mkdir -p $INST/.vim/autoload
