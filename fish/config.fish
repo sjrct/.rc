@@ -38,12 +38,11 @@ if status is-interactive
   if fisher --version &> /dev/null
     function fi -a pkg
       if not fisher list | grep $pkg &> /dev/null
-        fisher $pkg
+        fisher install $pkg
       end
     end
 
     fi patrickf1/fzf.fish
-    fi gazorby/fish-abbreviation-tips
   end
 end
 
