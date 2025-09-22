@@ -28,9 +28,9 @@ function link -a from to
 end
 
 function download_file -a dest url
-  set ckpath download_cache/checksums.sha1
-  set tmp download_cache/(basename $dest)
-  mkdir -p download_cache
+  set ckpath $INST/download_cache/checksums.sha1
+  set tmp $INST/download_cache/(basename $dest)
+  mkdir -p $INST/download_cache
 
   if [ ! -e $tmp ]
     wget -O $tmp $url
@@ -128,6 +128,8 @@ begin
   # Install moonshine colorscheme
   try_link $RC/moonshine.vim $INST/.vim/colors/moonshine.vim
   try_link $RC/moonshine.vim $INST/.local/share/nvim/site/colors/moonshine.vim
+
+  download_file $INST/.config/kitty/smart_scroll.py "https://raw.githubusercontent.com/yurikhan/kitty-smart-scroll/refs/heads/master/smart_scroll.py"
 
   # Generic git config stuff
   #   Credits:

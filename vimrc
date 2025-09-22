@@ -306,6 +306,7 @@ endif
 nnoremap <C-P> <cmd>FZF<Cr>
 
 " Automatically update kitty instances when saving the config
+" This doesn't work on mac
 autocmd BufWritePost ~/.config/kitty/kitty.conf :silent !pgrep kitty | xargs kill -SIGUSR1
 
 " macvim bindings
