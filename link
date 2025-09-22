@@ -20,6 +20,13 @@ function confirm -a message
   end
 end
 
+function link -a from to
+  echo "Linking $from -> $to"
+  echo $to >> installed_files
+  mkdir -p (dirname $to)
+  ln -s $from $to
+end
+
 function download_file -a dest url
   set ckpath download_cache/checksums.sha1
   set tmp download_cache/(basename $dest)
@@ -30,7 +37,7 @@ function download_file -a dest url
   end
 
   if [ -e $ckpath ]
-    and grep $tmp $ckpath
+    and grep $tmp $ckpath &> /dev/null
     # validate the file
     if not grep $tmp $ckpath | sha1sum -c - &> /dev/null
       echo "Invalid checksum for $path ($tmp)"
@@ -42,9 +49,7 @@ function download_file -a dest url
   end
 
   if [ ! -e $dest ]
-    mkdir -p (dirname $dest)
-    echo $dest >> installed_files
-    cp -v $tmp $dest
+    link $tmp $dest
   else if not cmp $tmp $dest
     echo "Refusing to clobber existing file: $dest"
   end
@@ -58,10 +63,7 @@ function try_link -a from to
       exit 1
     end
   else
-    echo "Linking $from -> $to"
-    echo $to >> installed_files
-    mkdir -p (dirname $to)
-    ln -s $from $to
+    link $from $to
   end
 end
 
