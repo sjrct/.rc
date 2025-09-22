@@ -1,50 +1,120 @@
-#!/bin/bash
+#!/usr/bin/env fish
+# vim:foldmethod=marker
 #
 # Install or update my RC files installation
 # I try to make this idempotent, so that you (I) can rerun it fine
 #
 
-set -e
 
-RC=$(dirname $(pwd)/$0)
-INST=$HOME
-if [[ -n $1 ]] ; then
-  INST=$1
-fi
+#: utility functions {{{
+function confirm -a message
+  while true
+    read -l -P "$mesage [y/n]" confirm
+
+    switch $confirm
+      case Y y
+        return 0
+      case N n
+        return 1
+    end
+  end
+end
+
+function download_file -a dest url
+  set $ckpath download_cache/checksums.sha1
+  set tmp download_cache/(basename $dest)
+  mkdir -p download_cache
+
+  if [ ! -e $tmp ]
+    wget -O $tmp $url
+  end
+
+  if grep $tmp $ckpath
+    # validate the file
+    if not grep $tmp $ckpath | sha1sum -c -
+      echo "Invalid checksum for $path ($tmp)"
+      exit 1
+    end
+  else
+    # append the checksum
+    sha1sum $tmp >> $ckpath
+  end
+
+  mkdir -p (dirname $dest)
+  cp -v $tmp $dest
+end
+
+function try_link -a from to
+  if [ -e $to ]
+    if [ ! -L $to ]
+      or [ (readlink -f $to) != (readlink -f $from) ]
+      echo Refusing to clobber existing file: $to
+      exit 1
+    end
+  else
+    echo Linking $from -> $to
+    ln -s $from $to
+  end
+end
+
+function try_link_r -a $from_dir $to_dir
+  for file in (find $from_dir -type f -printf "%P\n")
+    try_link $from_dir/$file $to_dir/$file
+  end
+end
+#:}}}
+
+#: dependency check {{{
+set deps fish wget git
+set recs vim nvim fzf fisher
+# Check if dependencies exist
+for dep in $deps
+  if which $dep &> /dev/null
+  else
+    echo "Warning: Required dependency $dep does not exist."
+    echo "Install and retry."
+    exit 1
+  end
+end
+
+for rec in $recs
+  if not which $rec &> /dev/null
+    echo "Warning: Missing recommended dependency $rec."
+  end
+end
+#: }}}
+
+# Configure information about where to install
+set RC (dirname $(pwd)/$0)
+set INST $HOME
+if [ -n $argv[1] ]
+  set INST $argv[1]
+end
 echo Installing to $INST
 echo RC files located at $RC
 
-# Link .rc files to true rc files
-if [[ ( -e $INST/.zshrc && ! -L $INST/.zshrc) \
-  || ( -e $INST/.vimrc && ! -L $INST/.vimrc) \
-  || ( -e $INST/.config/fish/config.fish && ! -L $INST/.config/fish/config.fish) ]]
-  then
-    echo -e "Non-symlinked .zshrc and .vimrc already exists!\nCannot install!"
-    exit 1
-fi
-
-[[ ! -L $INST/.zshrc ]] && ln -s $RC/zshrc $INST/.zshrc
-[[ ! -L $INST/.vimrc ]] && ln -s $RC/vimrc $INST/.vimrc
-[[ ! -L $INST/.config/fish/config.fish ]] && ln -s $RC/fish/config.fish $INST/.config/fish/config.fish
+try_link $RC/zshrc $INST/.zshrc
+try_link $RC/vimrc $INST/.vimrc
+try_link $RC/fish/config.fish $INST/.config/fish/config.fish
 
 # Tell git that local rc file changes can be ignored
 git -C $RC update-index --assume-unchanged local/*
 
 # Make vim directories
 mkdir -p $INST/.vim/autoload
-mkdir -p $INST/.vim/bundle
 mkdir -p $INST/.vim/colors
 mkdir -p $INST/.vim/undo
 mkdir -p $INST/.vim/tmp
 mkdir -p $INST/.vim/ftplugin
 
 # Install vim plug
-[[ ! -e $INST/.vim/autoload/plug.vim ]] && \
-  curl -LSso $INST/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+set PLUG_URL https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+download_file $INST/.vim/autoload/plug.vim $PLUG_URL
+download_file $INST/.local/share/nvim/site/autoload/plug.vim $PLUG_URL
 
 # Install moonshine colorscheme
-[[ ! -L $INST/.vim/colors/moonshine.vim ]] && \
-  ln -s $RC/moonshine.vim $INST/.vim/colors/moonshine.vim
+try_link $RC/moonshine.vim $INST/.vim/colors/moonshine.vim
+try_link $RC/moonshine.vim $INST/.local/share/nvim/site/colors/moonshine.vim
 
 # Generic git config stuff
 #   Credits:
@@ -61,3 +131,5 @@ git config --global alias.cm commit
 git config --global alias.a add
 git config --global alias.d 'diff --color'
 git config --global alias.df 'diff --color'
+git config --global alias.s 'status'
+git config --global alias.st 'status'

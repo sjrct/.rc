@@ -1,21 +1,18 @@
 set nocompatible
 
-if has('nvim')
-  set runtimepath^=~/.vim runtimepath+=~/.vim/after
-  let &packpath = &runtimepath
-endif
+set encoding=utf-8
 
 call plug#begin()
 Plug 'godlygeek/tabular'
 Plug 'lambdalisue/vim-findent'
 Plug 'vim-fuzzbox/fuzzbox.vim'
 Plug 'altercation/vim-colors-solarized'
-Plug '/opt/homebrew/opt/fzf'
 Plug 'tpope/vim-fugitive'
 Plug 'pangloss/vim-javascript'
 Plug 'preservim/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'Chiel92/vim-autoformat'
+" Handle lines numbers with gF etc
 Plug 'wsdjeg/vim-fetch'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -23,19 +20,26 @@ Plug 'posva/vim-vue'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'ap/vim-css-color'
 Plug 'leviosa42/kanagawa-mini.vim'
+Plug 'junegunn/fzf'
 
 if has('nvim')
+  function TsUpdateHook()
+    TSUpdate
+    TSInstall c lua vim vimdoc markdown python cpp dockerfile erlang rust fish bash
+  endfunction
+
   Plug 'rebelot/kanagawa.nvim'
   Plug 'mistweaverco/bafa.nvim'
     Plug 'nvim-tree/nvim-web-devicons'
-  Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
+  Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main', 'do': { -> TsUpdateHook() }}
   Plug 'jiaoshijie/undotree'
     Plug 'nvim-lua/plenary.nvim'
   Plug 'folke/which-key.nvim'
   Plug 'LunarVim/bigfile.nvim'
 else
-  Plug 'PhilRunninger/bufselect', { 'branch': 'vim-compatible' }
+  Plug 'PhilRunninger/bufselect', {'branch': 'vim-compatible'}
   Plug 'simnalamburt/vim-mundo'
 endif
 
@@ -49,6 +53,8 @@ set display=uhex      " Show unprintable characters as <xx>
 " If the terminal doesn't support true color... no luck
 if has('nvim')
   colo kanagawa
+  " CursorLine fix... setting ctermfg (which guifg overrides) makes it high priority
+  hi CursorLine guibg=#363646 ctermfg=1
 else
   colo kanagawa-mini
 endif
@@ -72,7 +78,6 @@ set backspace=indent,eol,start " Allow backspacing over things not inserted
 set showmatch matchtime=1   " Jump quickly back to matching parens et al
 set magic                   " Backslashes in regexes less necessary
 set ignorecase smartcase    " Smart casing for search
-set dir=$HOME/.vim/swap     " Swap file location
 set mouse=n                 " Mouse enabled in normal mode
 set grepprg=rg\ --vimgrep
 set ruler
@@ -82,17 +87,21 @@ set hidden
 set re=2                    " Use new regex engine
 set wildmenu
 set splitright splitbelow
+set shortmess+=S            " Display the "search hit BOTTOM" message
 
-set directory=$HOME/.vim/tmp
-set backupdir=$HOME/.vim/tmp
+" Swap file directory, should be SAME in vim and nvim
+" So they can see each other...
+set directory=$HOME/.vim/swap
+if !has('nvim')
+  set backupdir=$HOME/.vim/tmp
+endif
 
 " Undo history
 set undofile
 if !has('nvim')
+  " vim/nvim have incompatible undo formats
   set undodir=$HOME/.vim/undo
 endif
-
-"set tags=./tags;
 
 filetype plugin indent on
 au FileType * setlocal comments-=:// comments+=f://
@@ -109,9 +118,6 @@ au BufReadCmd *.jar,*.bundle call zip#Browse(expand("<amatch>"))
 au FileType python setlocal tags=./tags,tags,$HOME/.vim/tags/python3
 au FileType kotlin setlocal tags=./tags,tags,$HOME/.vim/tags/kotlin
 
-" Help for different filetype
-au FileType sh,zsh,make,dockerfile,c,cpp setlocal keywordprg=:Man
-au FileType vim,help setlocal keywordprg=:help
 au FileType help wincmd L
 
 if has('nvim')
@@ -158,8 +164,9 @@ endfunction
 nnoremap <Leader>-x :call Scratch()
 
 " C-E to insert first match during completion
-" Needs to be not nore bc this is interacting with CoC completion
-imap <C-E> <C-N><C-P>
+" (like other programs... by default this stops completion)
+" TODO somehow only bind for completion submode
+imap <C-E> <C-Y>
 
 " Ignore arrow keys
 inoremap <left> <nop>
@@ -209,7 +216,6 @@ inoremap <silent><expr> <c-@> coc#start()
 
 " Terminal mode stuff
 function! TermStartup()
-  normal isource ~/.vim/termrc<Esc>
   startinsert
 endfunction
 
@@ -225,16 +231,16 @@ if has('nvim')
 endif
 
 " location list
-nnoremap <Leader>C :cwindow<Cr>
-nnoremap <Leader>c :cnext<Cr>
-nnoremap <Leader>X :lwindow<Cr>
-nnoremap <Leader>x :lnext<Cr>
+nnoremap <Leader>C <cmd>cwindow<Cr>
+nnoremap <Leader>c <cmd>cnext<Cr>
+nnoremap <Leader>X <cmd>lwindow<Cr>
+nnoremap <Leader>x <cmd>lnext<Cr>
 
 " Git commands
 nnoremap <Leader>g  :Git 
-nnoremap <Leader>gb :Git blame<Cr>
-nnoremap <Leader>gd :Gvdiffsplit<Cr>
-nnoremap <Leader>gl :Git log<Cr>
+nnoremap <Leader>gb <cmd>Git blame<Cr>
+nnoremap <Leader>gd <cmd>Gvdiffsplit<Cr>
+nnoremap <Leader>gl <cmd>Git log<Cr>
 
 " Custom commands
 command! Ev e $MYVIMRC
@@ -271,13 +277,12 @@ let g:NERDTreeWinSize = 50
 " Gutentag options
 let g:gutentags_ctags_exclude = ['*mypy*']
 
-" Mundo opts
-" Undo tree
+" Mundo / undotree options
 if has('nvim')
   lua require('undotree').setup({ window = { winblend = 10 }})
-  nnoremap <silent> <Leader>u :lua require('undotree').toggle()<cr>
+  nnoremap <silent> <Leader>u <cmd>lua require('undotree').toggle()<cr>
 else
-  nnoremap <silent> <Leader>u :MundoToggle<Cr>
+  nnoremap <silent> <Leader>u <cmd>MundoToggle<Cr>
   let g:mundo_preview_bottom = 1
   let g:mundo_right = 1
 endif
@@ -288,7 +293,7 @@ let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint' ]
 
 " Fuzzy tools, buffer lists, etc
 if has('nvim')
-  nnoremap <silent> <leader>b :lua require('bafa.ui').toggle()<cr>
+  nnoremap <silent> <leader>b <cmd>lua require('bafa.ui').toggle()<cr>
 
   nnoremap <leader>ff <cmd>Telescope find_files<cr>
   nnoremap <leader>fg <cmd>Telescope live_grep<cr>
@@ -298,7 +303,10 @@ else
   nnoremap <silent> <leader>b :ShowBufferList<CR>
 endif
 
-nnoremap <C-P> :FZF<Cr>
+nnoremap <C-P> <cmd>FZF<Cr>
+
+" Automatically update kitty instances when saving the config
+autocmd BufWritePost ~/.config/kitty/kitty.conf :silent !pgrep kitty | xargs kill -SIGUSR1
 
 " macvim bindings
 if has("gui_macvim")
@@ -320,3 +328,9 @@ if has("gui_macvim")
   " Command-0 goes to the last tab
   noremap <D-0> :tablast<CR>
 endif
+
+" Source lua nvim setup
+if has('nvim')
+  " This thing gets annoying when i am not using it
+  exec 'source' stdpath('config') .. '/plugins.lua'
+end
