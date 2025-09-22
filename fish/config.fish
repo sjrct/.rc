@@ -1,34 +1,74 @@
+# vim:foldmethod=marker
+
 if status is-interactive
-    # Commands to run in interactive sessions can go here
+  #: Aliases {{{
+  alias ll 'ls -l'
+  alias la 'ls -a'
+  alias v nvim
+  alias kc kubectl
 
-    alias tsh-l "tsh login --proxy=teleport.hackedu.io:443 teleport.hackedu.io"
-    alias tsh-kl "tsh kube login labs-dev"
-    alias k-dev-clear "kubectl delete pods --all -n dev-sjrct --context teleport.hackedu.io-labs-dev"
+  # Docker composer aliases
+  alias dc 'docker compose'
+  alias dcd 'dc down'
+  alias dcu 'dc up -d'
+  alias dcr 'dc restart'
+  alias dcl 'dc logs'
 
-    alias ll "ls -l"
-    alias l ls
-    alias v vim
-    alias kc kubectl
+  # Git aliases
+  alias g 'git'
+  alias gcm 'git commit'
+  alias gch 'git checkout'
+  alias gd 'git diff'
+  alias gl 'git log'
+  alias ga 'git add'
+  alias gpl 'git pull'
+  alias gph 'git push'
+  alias gst 'git status'
 
-    # Docker composer aliases
-    alias dc 'docker compose'
-    alias dcd 'dc down'
-    alias dcu 'dc up -d'
-    alias dcr 'dc restart'
-    alias dcl 'dc logs'
+  if which xclip &> /dev/null
+    alias xcopy='xclip -in -selection clipboard'
+    alias xpaste='xclip -out -selection clipboard'
+  end
 
-    # Git aliases
-    alias g 'git'
-    alias gcm 'git commit'
-    alias gch 'git checkout'
-    alias gd 'git diff'
-    alias gl 'git log'
-    alias ga 'git add'
-    alias gpl 'git pull'
-    alias gph 'git push'
-
-    # fuzzy finder
-    fzf --fish | source
+  if [ $TERM = xterm-kitty ]
+    alias ssh='kitten ssh'
+  end
+  #: }}}
 end
 
-set -x EDITOR nvim
+#: Set EDITOR and MANPAGER {{{
+if which nvim &> /dev/null
+  set -x EDITOR nvim
+  if nvim --appimage-version &> /dev/null
+    # Appimage version (and snap version...) break with MANPAGER
+    set -x MANPAGER "nvim --appimage-extract-and-run +Man!"
+  else
+    set -x MANPAGER "nvim +Man!"
+  end
+else if which vim &> /dev/null
+  set -x EDITOR vim
+  set -x MANPAGER "/bin/sh -c 'col -b -x | vim -R -'"
+end
+#: }}}
+
+if which batcat &> /dev/null
+  alias bat='batcat'
+end
+
+if which fdfind &> /dev/null
+  alias fd='fdfind'
+end
+
+[ -e $HOME/.bin ] && fish_add_path $HOME/.bin
+[ -e $HOME/.cargo/bin ] && fish_add_path $HOME/.cargo/bin
+
+if which fisher &> /dev/null
+  function fi -a pkg
+    if not fisher list | grep $pkg
+      fisher $pkg
+    end
+  end
+
+  fi patrickf1/fzf.fish
+  fi gazorby/fish-abbreviation-tips
+end

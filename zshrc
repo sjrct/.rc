@@ -27,8 +27,7 @@ alias ocaml="rlwrap ocaml"
 alias less="less -R"
 alias ff="find . -iname"
 alias zed="$VIM ~/.zshrc ; source ~/.zshrc"
-alias zled="$VIM ~/.rc/local/zshrc ; source ~/.rc/local/zshrc"
-alias rez="source ~/.zshrc"
+alias zso="source ~/.zshrc"
 alias hb=halibot
 
 uprc() {
@@ -96,6 +95,3 @@ if [[ -n "$NVM_DIR" ]]; then
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
-
-# Load local options/overrides
-source $HOME/.rc/local/zshrc

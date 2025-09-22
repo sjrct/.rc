@@ -21,7 +21,7 @@ function confirm -a message
 end
 
 function download_file -a dest url
-  set $ckpath download_cache/checksums.sha1
+  set ckpath download_cache/checksums.sha1
   set tmp download_cache/(basename $dest)
   mkdir -p download_cache
 
@@ -29,7 +29,8 @@ function download_file -a dest url
     wget -O $tmp $url
   end
 
-  if grep $tmp $ckpath
+  if [ -e $ckpath ]
+    and grep $tmp $ckpath
     # validate the file
     if not grep $tmp $ckpath | sha1sum -c -
       echo "Invalid checksum for $path ($tmp)"
@@ -40,24 +41,30 @@ function download_file -a dest url
     sha1sum $tmp >> $ckpath
   end
 
-  mkdir -p (dirname $dest)
-  cp -v $tmp $dest
+  if [ ! -e $dest ]
+    mkdir -p (dirname $dest)
+    echo $dest >> installed_files
+    cp -v $tmp $dest
+  else if not cmp $tmp $dest
+    echo "Refusing to clobber existing file: $dest"
+  end
 end
 
 function try_link -a from to
   if [ -e $to ]
     if [ ! -L $to ]
       or [ (readlink -f $to) != (readlink -f $from) ]
-      echo Refusing to clobber existing file: $to
+      echo "Refusing to clobber existing file: $to"
       exit 1
     end
   else
-    echo Linking $from -> $to
+    echo "Linking $from -> $to"
+    echo $to >> installed_files
     ln -s $from $to
   end
 end
 
-function try_link_r -a $from_dir $to_dir
+function try_link_r -a from_dir to_dir
   for file in (find $from_dir -type f -printf "%P\n")
     try_link $from_dir/$file $to_dir/$file
   end
@@ -95,7 +102,8 @@ echo RC files located at $RC
 
 try_link $RC/zshrc $INST/.zshrc
 try_link $RC/vimrc $INST/.vimrc
-try_link $RC/fish/config.fish $INST/.config/fish/config.fish
+try_link_r $RC/fish $INST/.config/fish
+try_link_r $RC/nvim $INST/.config/nvim
 
 # Tell git that local rc file changes can be ignored
 git -C $RC update-index --assume-unchanged local/*
