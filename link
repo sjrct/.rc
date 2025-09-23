@@ -22,15 +22,15 @@ end
 
 function link -a from to
   echo "Linking $from -> $to"
-  echo $to >> installed_files
+  echo $to >> $RC/installed_files
   mkdir -p (dirname $to)
   ln -s $from $to
 end
 
 function download_file -a dest url
-  set ckpath $INST/download_cache/checksums.sha1
-  set tmp $INST/download_cache/(basename $dest)
-  mkdir -p $INST/download_cache
+  set ckpath $RC/download_cache/checksums.sha1
+  set tmp $RC/download_cache/(basename $dest)
+  mkdir -p $RC/download_cache
 
   if [ ! -e $tmp ]
     wget -O $tmp $url
@@ -76,10 +76,10 @@ end
 
 #: dependency check {{{
 set deps fish wget git
-set recs vim nvim fzf fisher
+set recs vim nvim fzf fisher eza wezterm bat
 # Check if dependencies exist
 for dep in $deps
-  if which $dep &> /dev/null
+  if $dep --version &> /dev/null
   else
     echo "Warning: Required dependency $dep does not exist."
     echo "Install and retry."
@@ -88,7 +88,7 @@ for dep in $deps
 end
 
 for rec in $recs
-  if not which $rec &> /dev/null
+  if not $rec --version &> /dev/null
     echo "Warning: Missing recommended dependency $rec."
   end
 end
@@ -131,6 +131,14 @@ begin
   try_link $RC/moonshine.vim $INST/.local/share/nvim/site/colors/moonshine.vim
 
   download_file $INST/.config/kitty/smart_scroll.py "https://raw.githubusercontent.com/yurikhan/kitty-smart-scroll/refs/heads/master/smart_scroll.py"
+
+  if wezterm --version &> /dev/null
+    wezterm shell-completion --shell fish > ~/.config/fish/conf.d/wezterm.fish
+  end
+
+  if eza --version &> /dev/null
+    download_file $INST/.config/fish/conf.d/eza.fish "https://raw.githubusercontent.com/eza-community/eza/refs/heads/main/completions/fish/eza.fish"
+  end
 
   # Generic git config stuff
   #   Credits:

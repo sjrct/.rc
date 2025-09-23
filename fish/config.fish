@@ -33,6 +33,10 @@ if status is-interactive
   if [ $TERM = xterm-kitty ]
     alias ssh='kitten ssh'
   end
+
+  if eza --version &> /dev/null
+    alias ls='eza --icons=auto'
+  end
   #: }}}
 
   if fisher --version &> /dev/null
