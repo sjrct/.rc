@@ -1,7 +1,9 @@
+" vim:foldmethod=marker
 set nocompatible
 
 set encoding=utf-8
 
+": Plug {{{
 call plug#begin()
 Plug 'godlygeek/tabular'
 Plug 'lambdalisue/vim-findent'
@@ -33,10 +35,11 @@ if has('nvim')
     Plug 'nvim-tree/nvim-web-devicons'
   Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-lua/plenary.nvim'
-    Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main', 'do': { -> TsUpdateHook() }}
+    "Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main', 'do': { -> TsUpdateHook() }}
   Plug 'jiaoshijie/undotree'
     Plug 'nvim-lua/plenary.nvim'
   Plug 'folke/which-key.nvim'
+  Plug 'tversteeg/registers.nvim'
   Plug 'LunarVim/bigfile.nvim'
 else
   Plug 'PhilRunninger/bufselect', {'branch': 'vim-compatible'}
@@ -44,11 +47,13 @@ else
 endif
 
 call plug#end()
+": }}}
 
 " Appearance options
-set nu rnu
+set nu rnu signcolumn=yes " Relative line numbers, reserve space for "sign" (git, errors...)
+set display=uhex          " Show unprintable characters as <xx>
 syntax on
-set display=uhex      " Show unprintable characters as <xx>
+syntax sync fromstart
 
 " If the terminal doesn't support true color... no luck
 if has('nvim')
@@ -57,13 +62,13 @@ if has('nvim')
   hi CursorLine guibg=#363646 ctermfg=1
 else
   colo kanagawa-mini
+
+  hi DiagnosticUnderlineError cterm=undercurl gui=undercurl
+  hi DiagnosticUnderlineWarn  cterm=undercurl gui=undercurl
+  hi DiagnosticUnderlineInfo  cterm=undercurl gui=undercurl
+  hi DiagnosticUnderlineOk    cterm=undercurl gui=undercurl
 endif
 set termguicolors
-
-hi DiagnosticUnderlineError cterm=undercurl gui=undercurl
-hi DiagnosticUnderlineWarn  cterm=undercurl gui=undercurl
-hi DiagnosticUnderlineInfo  cterm=undercurl gui=undercurl
-hi DiagnosticUnderlineOk    cterm=undercurl gui=undercurl
 
 " Tabbing options
 set ts=2 sw=2
@@ -299,6 +304,7 @@ if has('nvim')
   nnoremap <leader>fg <cmd>Telescope live_grep<cr>
   nnoremap <leader>fb <cmd>Telescope buffers<cr>
   nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+  nnoremap <leader>fo <cmd>Telescope oldfiles<cr>
 else
   nnoremap <silent> <leader>b :ShowBufferList<CR>
 endif
