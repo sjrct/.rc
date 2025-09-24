@@ -34,12 +34,12 @@ if status is-interactive
     alias ssh='kitten ssh'
   end
 
-  if eza --version &> /dev/null
+  if type -q eza
     alias ls='eza --icons=auto'
   end
   #: }}}
 
-  if fisher --version &> /dev/null
+  if type -q fisher
     function fi -a pkg
       if not fisher list | grep $pkg &> /dev/null
         fisher install $pkg
@@ -51,7 +51,7 @@ if status is-interactive
 end
 
 #: Set EDITOR and MANPAGER {{{
-if which nvim &> /dev/null
+if type -q nvim
   set -x EDITOR nvim
   if nvim --appimage-version &> /dev/null
     # Appimage version (and snap version...) break with MANPAGER
@@ -59,17 +59,17 @@ if which nvim &> /dev/null
   else
     set -x MANPAGER "nvim +Man!"
   end
-else if which vim &> /dev/null
+else if type -q vim
   set -x EDITOR vim
   set -x MANPAGER "/bin/sh -c 'col -b -x | vim -R -'"
 end
 #: }}}
 
-if which batcat &> /dev/null
+if type -q batcat
   alias bat='batcat'
 end
 
-if which fdfind &> /dev/null
+if type -q fdfind
   alias fd='fdfind'
 end
 

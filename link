@@ -79,8 +79,7 @@ set deps fish wget git
 set recs vim nvim fzf fisher eza wezterm bat
 # Check if dependencies exist
 for dep in $deps
-  if $dep --version &> /dev/null
-  else
+  if not type -q $dep
     echo "Warning: Required dependency $dep does not exist."
     echo "Install and retry."
     exit 1
@@ -88,7 +87,7 @@ for dep in $deps
 end
 
 for rec in $recs
-  if not $rec --version &> /dev/null
+  if not type -q $rec
     echo "Warning: Missing recommended dependency $rec."
   end
 end
@@ -132,11 +131,11 @@ begin
 
   download_file $INST/.config/kitty/smart_scroll.py "https://raw.githubusercontent.com/yurikhan/kitty-smart-scroll/refs/heads/master/smart_scroll.py"
 
-  if wezterm --version &> /dev/null
+  if type -q wezterm
     wezterm shell-completion --shell fish > ~/.config/fish/conf.d/wezterm.fish
   end
 
-  if eza --version &> /dev/null
+  if type -q eza
     download_file $INST/.config/fish/conf.d/eza.fish "https://raw.githubusercontent.com/eza-community/eza/refs/heads/main/completions/fish/eza.fish"
   end
 
