@@ -35,5 +35,14 @@ require('nvim-treesitter.config').setup({
 })
 
 require('which-key').setup({
-  delay = 500
+  delay = 700,
+  ---@param ctx { mode: string, operator: string }
+  defer = function(ctx)
+    --if vim.list_contains({ "d", "y" }, ctx.operator) then
+    --  return true
+    --end
+
+    -- Defer when entering visual mode
+    return vim.list_contains({ "v", "V", "<C-V>" }, ctx.mode)
+  end,
 })
