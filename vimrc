@@ -93,6 +93,7 @@ set re=2                    " Use new regex engine
 set wildmenu
 set splitright splitbelow
 set shortmess+=S            " Display the "search hit BOTTOM" message
+set cpoptions-=_            " cw behaves like it should (otherwise special-cased for compatibility)
 
 " Swap file directory, should be SAME in vim and nvim
 " So they can see each other...
@@ -169,7 +170,8 @@ endfunction
 nnoremap <Leader>-x :call Scratch()
 
 " C-E to insert first match during completion
-" (like other programs... by default this stops completion)
+" I'm used to this bc in fish it is bound to "end-of-line" which completes the
+" suggested rest of the line when at the end of manually inserted text.
 " TODO somehow only bind for completion submode
 imap <C-E> <C-Y>
 
