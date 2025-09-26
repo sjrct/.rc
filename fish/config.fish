@@ -39,6 +39,7 @@ if status is-interactive
   end
   #: }}}
 
+  #: Plugins {{{
   if type -q fisher
     function fi -a pkg
       if not fisher list | grep $pkg &> /dev/null
@@ -48,6 +49,25 @@ if status is-interactive
 
     fi patrickf1/fzf.fish
   end
+  #: }}}
+
+  #: Key bindings {{{
+  fish_vi_key_bindings
+
+  # A few emacsish bindings...
+  bind -M default ctrl-a beginning-of-line
+  bind -M default ctrl-e end-of-line
+  bind -M default delete delete-char
+  bind -M default backspace backward-delete-char
+  bind -M default alt-backspace backward-kill-word
+  bind -M default ctrl-backspace backward-kill-word
+  bind -M insert ctrl-a beginning-of-line
+  bind -M insert ctrl-e end-of-line
+  bind -M insert delete delete-char
+  bind -M insert backspace backward-delete-char
+  bind -M insert alt-backspace backward-kill-word
+  bind -M insert ctrl-backspace backward-kill-word
+  #: }}}
 end
 
 #: Set EDITOR and MANPAGER {{{
