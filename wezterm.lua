@@ -59,6 +59,12 @@ config.keys = {
     mods = 'CTRL|SHIFT',
     action = act.ToggleFullScreen,
   },
+  -- CTRL|SHIFT|X doesn't work on macos
+  {
+    key = 'X',
+    mods = 'CTRL|SHIFT|ALT',
+    action = act.ActivateCopyMode,
+  },
 }
 --: }}}
 
