@@ -17,7 +17,6 @@ Plug 'Chiel92/vim-autoformat'
 " Handle lines numbers with gF etc
 Plug 'wsdjeg/vim-fetch'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'posva/vim-vue'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'ap/vim-css-color'
@@ -39,15 +38,24 @@ if has('nvim')
   Plug 'jiaoshijie/undotree'
     Plug 'nvim-lua/plenary.nvim'
   Plug 'folke/which-key.nvim'
+  Plug 'folke/trouble.nvim'
   Plug 'tversteeg/registers.nvim'
   Plug 'LunarVim/bigfile.nvim'
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'lewis6991/gitsigns.nvim'
+  Plug 'chentoast/marks.nvim'
 else
   Plug 'PhilRunninger/bufselect', {'branch': 'vim-compatible'}
   Plug 'simnalamburt/vim-mundo'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
 
 call plug#end()
 ": }}}
+
+" So autocommands are not readded on resourcing
+augroup vimrc
+au!
 
 " Appearance options
 set nu rnu signcolumn=yes " Relative line numbers, reserve space for "sign" (git, errors...)
@@ -99,7 +107,6 @@ set hidden
 set re=2                    " Use new regex engine
 set wildmenu
 set splitright splitbelow
-set shortmess+=S            " Display the "search hit BOTTOM" message
 set cpoptions-=_            " cw behaves like it should (otherwise special-cased for compatibility)
 
 " Swap file directory, should be SAME in vim and nvim
@@ -213,20 +220,24 @@ nnoremap <Leader>] :tab <cword><Cr>
 nnoremap <Leader>m :make\|cwindow<Cr>
 vnoremap @ y:@"<Cr>
 
-" -t for hints in typescript
-"autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
-"autocmd FileType javascript,javascriptreact,typescript,typescriptreact nnoremap <silent> K :call CocAction('doHover')<CR>
-"autocmd FileType javascript,javascriptreact,typescript,typescriptreact nnoremap <silent> <C-]> <Plug>(coc-definition)
+" LSP server stuff
+if has('nvim')
+  set completeopt=menu,popup,noinsert
 
-nmap <silent> <leader>d <Plug>(coc-definition)
-nmap <silent> <leader>D <Plug>(coc-declaration)
-nmap <silent> <leader>t <Plug>(coc-type-definition)
-nmap <silent> <leader>r <Plug>(coc-references)
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-nmap <leader>a <Plug>(coc-codeaction)
-nmap <leader>R <Plug>(coc-rename)
-inoremap <silent><expr> <c-@> coc#start()
+  lua vim.lsp.enable('clangd')
+  lua vim.lsp.enable('pyright')
+  lua vim.lsp.enable('vimls')
+else
+  nmap <silent> <leader>d <Plug>(coc-definition)
+  nmap <silent> <leader>D <Plug>(coc-declaration)
+  nmap <silent> <leader>t <Plug>(coc-type-definition)
+  nmap <silent> <leader>r <Plug>(coc-references)
+  nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]g <Plug>(coc-diagnostic-next)
+  nmap <leader>a <Plug>(coc-codeaction)
+  nmap <leader>R <Plug>(coc-rename)
+  inoremap <silent><expr> <c-@> coc#start()
+endif
 
 " Terminal mode stuff
 function! TermStartup()
@@ -247,12 +258,12 @@ endif
 " location list
 nnoremap <Leader>C <cmd>cwindow<Cr>
 nnoremap <Leader>c <cmd>cnext<Cr>
-nnoremap <Leader>X <cmd>lwindow<Cr>
-nnoremap <Leader>x <cmd>lnext<Cr>
+"nnoremap <Leader>X <cmd>lwindow<Cr>
+"nnoremap <Leader>x <cmd>lnext<Cr>
 
 " Git commands
 nnoremap <Leader>g  :Git 
-nnoremap <Leader>gb <cmd>Git blame<Cr>
+nnoremap <Leader>gb <cmd>Gitsigns blame<Cr>
 nnoremap <Leader>gd <cmd>Gvdiffsplit<Cr>
 nnoremap <Leader>gl <cmd>Git log<Cr>
 
@@ -314,6 +325,12 @@ if has('nvim')
   nnoremap <leader>fb <cmd>Telescope buffers<cr>
   nnoremap <leader>fh <cmd>Telescope help_tags<cr>
   nnoremap <leader>fo <cmd>Telescope oldfiles<cr>
+
+  nnoremap <leader>xx <cmd>Trouble diagnostics toggle<cr>
+  nnoremap <leader>xX <cmd>Trouble diagnostics toggle filter.buf=0<cr>
+  nnoremap <leader>xl <cmd>Trouble loclist toggle<cr>
+  nnoremap <leader>xq <cmd>Trouble qfxlist toggle<cr>
+
 else
   nnoremap <silent> <leader>b :ShowBufferList<CR>
 endif
@@ -350,3 +367,5 @@ if has('nvim')
   " This thing gets annoying when i am not using it
   exec 'source' stdpath('config') .. '/plugins.lua'
 end
+
+augroup END "augroup vimrc
