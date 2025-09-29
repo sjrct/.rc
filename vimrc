@@ -83,7 +83,14 @@ set backspace=indent,eol,start " Allow backspacing over things not inserted
 set showmatch matchtime=1   " Jump quickly back to matching parens et al
 set magic                   " Backslashes in regexes less necessary
 set ignorecase smartcase    " Smart casing for search
-set mouse=n                 " Mouse enabled in normal mode
+if !has('nvim') && $TERM == 'xterm-kitty'
+  " In X at least, kitty font scaling broken with mouse mode enabled
+  " and ttymouse=sgr
+  " But not broken w/ 'vim' then ':set mouse=n'... Why?? FIXME
+  " urxvt works for more columns but is a little clunkier
+  set ttymouse=xterm2
+endif
+set mouse=nv
 set grepprg=rg\ --vimgrep
 set ruler
 set cul
