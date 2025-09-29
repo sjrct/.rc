@@ -76,7 +76,9 @@ end
 
 #: dependency check {{{
 set deps fish wget git
-set recs vim nvim fzf fisher eza wezterm bat
+set recs vim nvim fzf fisher eza wezterm bat \
+         pyright clangd vim-language-server
+
 # Check if dependencies exist
 for dep in $deps
   if not type -q $dep
