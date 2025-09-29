@@ -263,9 +263,16 @@ nnoremap <Leader>c <cmd>cnext<Cr>
 
 " Git commands
 nnoremap <Leader>g  :Git 
-nnoremap <Leader>gb <cmd>Gitsigns blame<Cr>
 nnoremap <Leader>gd <cmd>Gvdiffsplit<Cr>
 nnoremap <Leader>gl <cmd>Git log<Cr>
+if has('nvim')
+  " This gitdiff is nicer than fugitives...
+  nnoremap <Leader>gb <cmd>Gitsigns blame<Cr>
+  nnoremap <Leader>gs <cmd>Gitsigns stage_hunk<Cr>
+  nnoremap <Leader>gD <cmd>Gitsigns preview_hunk_inline<Cr>
+else
+  nnoremap <Leader>gb <cmd>Git blame<Cr>
+endif
 
 " Custom commands
 command! Ev e $MYVIMRC
