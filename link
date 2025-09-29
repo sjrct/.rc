@@ -145,15 +145,19 @@ begin
   #     ll - durdn
   git config --global push.default current
   git config --global pull.rebase true
-  git config --global alias.lg1 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
-  git config --global alias.lg2 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
-  git config --global alias.lg '!git lg2'
-  git config --global alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat'
-  git config --global alias.co checkout
-  git config --global alias.cm commit
   git config --global alias.a add
+  git config --global alias.b branch
+  git config --global alias.cm commit
+  git config --global alias.cl clone
+  git config --global alias.co checkout
   git config --global alias.d 'diff --color'
   git config --global alias.df 'diff --color'
+  git config --global alias.lg '!git lg1'
+  git config --global alias.lg1 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
+  git config --global alias.lg2 "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
+  git config --global alias.ll 'log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat'
+  git config --global alias.ph 'push'
+  git config --global alias.pl 'pull'
   git config --global alias.s 'status'
   git config --global alias.st 'status'
 end
