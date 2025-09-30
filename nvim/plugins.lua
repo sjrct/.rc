@@ -1,3 +1,4 @@
+-- vim:foldmethod=marker
 require('telescope').setup{
   defaults = {
     -- Default configuration for telescope goes here:
@@ -49,7 +50,7 @@ require('which-key').setup({
 
 local augrp = vim.api.nvim_create_augroup('plugins.lua', {clear = true})
 
-local triggers = {'.'}
+--: Completion {{{
 vim.api.nvim_create_autocmd('InsertCharPre', {
   group = augrp,
   buffer = vim.api.nvim_get_current_buf(),
@@ -62,7 +63,7 @@ vim.api.nvim_create_autocmd('InsertCharPre', {
     local line = vim.api.nvim_get_current_line()
 
     -- Trigger when typing non-whitespace char on whitespace-only line
-    if not char:match('%s') and line:match('^%s*$') then
+    if not char:match('%s') and line:match('^%s*$') and vim.opt.omnifunc:get() ~= "" then
       local key = vim.keycode('<C-x><C-o>')
       vim.api.nvim_feedkeys(key, 'm', false)
     end
@@ -82,12 +83,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
   end
 })
+--: }}}
 
 vim.diagnostic.config({
   -- virtual_lines = true,
   virtual_text = true,
 })
 
+--: Sign marks {{{
 require'marks'.setup {
   -- whether to map keybinds or not. default true
   default_mappings = true,
@@ -124,3 +127,4 @@ require'marks'.setup {
   -- },
   mappings = {}
 }
+--: }}}
