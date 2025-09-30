@@ -79,7 +79,7 @@ def create_cells() -> list[str]:
     now = datetime.datetime.now()
     win = get_boss().active_tab_manager.active_window
     return [
-        '' + (win.cwd_of_child if win else '?'),
+        '  ' + (win.cwd_of_child if win else '?'),
         now.strftime("%d %b"),
         now.strftime("%H:%M"),
     ]
