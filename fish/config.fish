@@ -1,5 +1,9 @@
 # vim:foldmethod=marker
 
+if [ (fish --version | cut -f3 -d' ' | cut -f1 -d.) -lt 4 ]
+  echo Fish version less than 4... vi mode is wonky, some binds dont work
+end
+
 if status is-interactive
   # FIXME
   source $HOME/.rc/aliases
@@ -20,21 +24,17 @@ if status is-interactive
   fish_vi_key_bindings
 
   # A few emacsish bindings...
-  bind -M default \ca beginning-of-line
-  bind -M default \ce end-of-line
+  bind -M default ctrl-a beginning-of-line
+  bind -M default ctrl-e end-of-line
   bind -M default delete delete-char
-  bind -M default \b backward-kill-word
-  bind -M default \e\x7F backward-kill-word
   bind -M default backspace backward-delete-char
   bind -M default alt-backspace backward-kill-word
   bind -M default ctrl-backspace backward-kill-word
 
-  bind -M insert \ca beginning-of-line
-  bind -M insert \ce end-of-line
+  bind -M insert ctrl-a beginning-of-line
+  bind -M insert ctrl-e end-of-line
   bind -M insert delete delete-char
   bind -M insert backspace backward-delete-char
-  bind -M insert \b backward-kill-word
-  bind -M insert \e\x7F backward-kill-word
   bind -M insert alt-backspace backward-kill-word
   bind -M insert ctrl-backspace backward-kill-word
   #: }}}

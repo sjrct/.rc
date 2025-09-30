@@ -111,6 +111,7 @@ begin
   try_link_r $RC/nvim $INST/.config/nvim
   try_link_r $RC/kitty $INST/.config/kitty
   try_link $RC/wezterm.lua $INST/.wezterm.lua
+  try_link $RC/bashrc $INST/.bashrc
 
   # Tell git that local rc file changes can be ignored
   #git -C $RC update-index --assume-unchanged local/*
