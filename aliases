@@ -7,6 +7,8 @@
 alias ll='ls -l'
 alias la='ls -a'
 alias v=nvim
+# I've given in...
+alias vim=nvim
 alias kc=kubectl
 
 # Docker composer aliases
