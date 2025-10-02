@@ -33,10 +33,10 @@ alias dcr='docker compose restart'
 alias dcu='docker compose up -d'
 alias dcd='docker compose down'
 
-type xclip 2&>1 > /dev/null && alias xcopy='xclip -in -selection clipboard'
-type xclip 2&>1 > /dev/null && alias xpaste='xclip -out -selection clipboard'
+type xclip 2> /dev/null > /dev/null && alias xcopy='xclip -in -selection clipboard'
+type xclip 2> /dev/null > /dev/null && alias xpaste='xclip -out -selection clipboard'
 
-type eza 2&>1 > /dev/null && alias ls='eza --icons=auto'
+type eza 2> /dev/null > /dev/null && alias ls='eza --icons=auto'
 
 [ $TERM = xterm-kitty ] && alias ssh='kitten ssh'
 
