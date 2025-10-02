@@ -93,6 +93,7 @@ set smartindent
 set smarttab
 set sr
 set history=500
+set scrolloff=3  " Keep at least 3 lines below cursor on screen
 
 set backspace=indent,eol,start " Allow backspacing over things not inserted
 set showmatch matchtime=1   " Jump quickly back to matching parens et al
@@ -237,9 +238,14 @@ vnoremap @ y:@"<Cr>
 if has('nvim')
   set completeopt=menu,popup,noinsert
 
+  nnoremap grd <cmd>lua vim.lsp.buf.definition()<Cr>
+  " As in "Overview", also defaultly mapped to just gO
+  nnoremap grO <cmd>lua vim.lsp.buf.document_symbol()<Cr>
+
   lua vim.lsp.enable('clangd')
   lua vim.lsp.enable('pyright')
   lua vim.lsp.enable('vimls')
+  lua vim.lsp.enable('csharp-ls')
 else
   nmap <silent> <leader>d <Plug>(coc-definition)
   nmap <silent> <leader>D <Plug>(coc-declaration)
@@ -267,6 +273,9 @@ if has('nvim')
   tnoremap <Esc> <C-\><C-N>
   tnoremap <C-W> <C-\><C-N><C-W>
 endif
+
+" Maximize window
+nnoremap <C-W>m :wincmd _<Bar>wincmd <Bar><CR>
 
 " location list
 nnoremap <Leader>C <cmd>cwindow<Cr>
