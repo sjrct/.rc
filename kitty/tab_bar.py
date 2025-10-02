@@ -1,7 +1,5 @@
+import os
 import datetime
-import json
-import subprocess
-from collections import defaultdict
 
 from kitty.boss import get_boss
 from kitty.fast_data_types import Screen, add_timer
@@ -75,15 +73,22 @@ def draw_right_status(draw_data: DrawData, screen: Screen) -> None:
         screen.draw(f"{cell}")
 
 
+def get_cwd():
+    win = get_boss().active_tab_manager.active_window
+    if win:
+        home = os.getenv('HOME')
+        return win.cwd_of_child.replace(home, '~')
+    else:
+        return '?'
+
+
 def create_cells() -> list[str]:
     now = datetime.datetime.now()
-    win = get_boss().active_tab_manager.active_window
     return [
-        '  ' + (win.cwd_of_child if win else '?'),
+        '  ' + get_cwd(),
         now.strftime("%d %b"),
         now.strftime("%H:%M"),
     ]
-
 
 
 def _redraw_tab_bar(timer_id):
