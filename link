@@ -105,6 +105,13 @@ begin
   echo Installing to $INST
   echo RC files located at $RC
 
+  # Remove existing default config.fish if it exists
+  # TODO cleanup
+  if [ (sha1sum $INST/.config/fish/config.fish | awk '{print $1}') = (awk '{print $1}' default_fish_config.fish.sha1) ]
+    echo Overwriting default fish/config.fish
+    rm $INST/.config/fish/config.fish
+  end
+
   try_link $RC/zshrc $INST/.zshrc
   try_link $RC/vimrc $INST/.vimrc
   try_link_r $RC/fish $INST/.config/fish
