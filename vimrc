@@ -11,7 +11,6 @@ Plug 'vim-fuzzbox/fuzzbox.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-fugitive'
 Plug 'pangloss/vim-javascript'
-Plug 'preservim/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'Chiel92/vim-autoformat'
 " Handle lines numbers with gF etc
@@ -138,8 +137,6 @@ au BufReadCmd *.jar,*.bundle call zip#Browse(expand("<amatch>"))
 au FileType python setlocal tags=./tags,tags,$HOME/.vim/tags/python3
 au FileType kotlin setlocal tags=./tags,tags,$HOME/.vim/tags/kotlin
 
-au FileType help wincmd L
-
 if has('nvim')
   au TermOpen * setlocal keywordprg=:Man
 endif
@@ -148,6 +145,7 @@ au FileType man setlocal linebreak
 
 " Move new help windows to right
 "au FileType help wincmd L | set bh=unload
+au FileType help wincmd L
 
 " Highlight extra whitespace
 highlight ExtraWhitespace ctermbg=167 guibg=#C34043
@@ -166,7 +164,7 @@ endfunction
 au InsertChange * :call MatchUnderCursor()
 au CursorMoved  * :call MatchUnderCursor()
 au CursorMovedI * :call MatchUnderCursor()
-highlight WordUnderCursor ctermfg=123 guifg=#A3D4D5 cterm=bold gui=bold
+highlight WordUnderCursor ctermfg=123 guifg=#A3D4D5 cterm=bold,underline gui=bold,underline
 
 " Scratch pad support
 function! Scratch()
@@ -189,14 +187,17 @@ nnoremap <Leader>-x :call Scratch()
 " TODO somehow only bind for completion submode
 imap <C-E> <C-Y>
 
-" Ignore arrow keys
-inoremap <left> <nop>
-inoremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
+" Only use ^E to select completion... not tab
+" For some reason, in 2nd insert completion state when starting completion
+" automatically so typing flow interrupted when typing newline and ignoring
+" autocompletion.
+inoremap <expr> <CR> pumvisible() ? "\<C-E>\<CR>" : "\<CR>"
 
 " disable ex mode...
 nnoremap Q <nop>
+
+" Don't have to type shift...
+nnoremap q; q:
 
 " Have Y work like D
 noremap Y y$
@@ -219,7 +220,6 @@ nnoremap <Leader>w :tabc<Cr>
 nnoremap <Leader>e :tabe<Cr>
 nnoremap <Leader>/ :LGrep 
 nnoremap <Leader>? :LGrep <C-R>=expand("<cword>")<Cr> -ws
-nnoremap <Leader>' :NERDTreeToggle<Cr>
 nnoremap <Leader>n :set nu! rnu!<Cr>
 nnoremap <Leader>] :tab <cword><Cr>
 nnoremap <Leader>m :make\|cwindow<Cr>
@@ -308,8 +308,11 @@ set showtabline=2
 " Indentation detection
 au BufReadPost * :Findent --no-messages --no-warnings
 
-" Nerd tree options
-let g:NERDTreeWinSize = 50
+" File browsing options
+let g:netrw_liststyle = 2
+let g:netrw_winsize = 25
+nnoremap <leader>' :Lexplore<cr>
+au FileType netrw nnoremap <buffer> <nowait> q :Lexplore<cr>
 
 " Gutentag options
 let g:gutentags_ctags_exclude = ['*mypy*']
@@ -325,8 +328,6 @@ else
 endif
 
 let g:c_syntax_for_h = 1
-
-let g:coc_global_extensions = [ 'coc-tsserver', 'coc-eslint' ]
 
 " Fuzzy tools, buffer lists, etc
 if has('nvim')
