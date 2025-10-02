@@ -203,6 +203,11 @@ noremap Y y$
 
 " Emacs-like shortcuts in command line mode...
 cnoremap <C-A> <C-B>
+cnoremap <M-Left> <C-Left>
+cnoremap <M-Right> <C-Right>
+cnoremap <C-BS> <C-W>
+cnoremap <S-BS> <C-W>
+cnoremap <M-BS> <C-W>
 
 " Custom shortcuts
 nnoremap <Leader>-c :set cuc!<Cr>
