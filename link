@@ -57,10 +57,11 @@ end
 
 function try_link -a from to
   if [ -e $to ]
-    if [ ! -L $to ]
-      or [ (readlink -f $to) != (readlink -f $from) ]
+    if [ ! -L $to ]; or [ (readlink -f $to) != (readlink -f $from) ]
       echo "Refusing to clobber existing file: $to"
       exit 1
+    else
+      vecho Already linked: $to
     end
   else
     link $from $to
@@ -71,6 +72,12 @@ function try_link_r -a from_dir to_dir
   set files (cd $from_dir && find . -type f)
   for file in $files
     try_link $from_dir/$file $to_dir/$file
+  end
+end
+
+function vecho
+  if [ -n "$_flag_verbose" ]
+    echo "*" $argv
   end
 end
 #:}}}
@@ -95,20 +102,46 @@ for rec in $recs
   end
 end
 #: }}}
-
 begin
+  #: Argument handling {{{
+  argparse -n link 'i/install-path=' 'h/help' 'v/verbose' -- $argv
+  or exit 1
+
+  # To make this available in vecho
+  set -g _flag_verbose $_flag_verbose
+
+  if set -q _flag_help
+    echo "
+  link - links rc files
+
+  Options:
+    -i, --install-path [PATH]
+      Install to this path. Default is \$HOME
+
+    -h, --help
+      Show this help
+
+    -v, --verbose
+      Verbose output (mostly prine
+  "
+    exit
+  end
+  #: }}}
+
   # Configure information about where to install
   set RC (realpath (dirname (status -f)))
   set INST $HOME
-  if [ (count $argv) -gt 0 ]
-    set INST $argv[1]
+  if [ -n "$_flag_install_path" ]
+    set INST (realpath $_flag_install_path)
   end
-  echo Installing to $INST
-  echo RC files located at $RC
+
+  vecho Installing to $INST
+  vecho RC files located at $RC
 
   # Remove existing default config.fish if it exists
   # TODO cleanup
-  if [ (sha1sum $INST/.config/fish/config.fish | awk '{print $1}') = (awk '{print $1}' default_fish_config.fish.sha1) ]
+  set fish_conf $INST/.config/fish/config.fish
+  if [ -e "$fish_conf" ] && [ (sha1sum "$fish_conf" | awk '{print $1}') = (awk '{print $1}' default_fish_config.fish.sha1) ]
     echo Overwriting default fish/config.fish
     rm $INST/.config/fish/config.fish
   end
@@ -171,4 +204,8 @@ begin
   git config --global alias.pl 'pull'
   git config --global alias.s 'status'
   git config --global alias.st 'status'
+
+  # Install/update vim/nvim plugins
+  type -q vim  && vecho Updating vim plugins  && vim -e -s       "+PlugInstall --sync" +qa
+  type -q nvim && vecho Updating nvim plugins && nvim --headless "+PlugInstall --sync" +qa
 end
