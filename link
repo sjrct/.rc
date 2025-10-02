@@ -68,7 +68,8 @@ function try_link -a from to
 end
 
 function try_link_r -a from_dir to_dir
-  for file in (find $from_dir -type f -exec basename '{}' \;)
+  set files (cd $from_dir && find . -type f)
+  for file in $files
     try_link $from_dir/$file $to_dir/$file
   end
 end
