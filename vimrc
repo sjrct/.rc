@@ -28,12 +28,18 @@ if has('nvim')
     TSInstall c lua vim vimdoc markdown python cpp dockerfile erlang rust fish bash
   endfunction
 
-  Plug 'rebelot/kanagawa.nvim'
+  " Themes
+  Plug 'zaldih/themery.nvim'
+    Plug 'rebelot/kanagawa.nvim'
+    Plug 'ellisonleao/gruvbox.nvim'
+    Plug 'Shatur/neovim-ayu'
+    Plug 'rose-pine/neovim'
+
   Plug 'mistweaverco/bafa.nvim'
     Plug 'nvim-tree/nvim-web-devicons'
   Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-lua/plenary.nvim'
-    "Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main', 'do': { -> TsUpdateHook() }}
+    Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main', 'do': { -> TsUpdateHook() }}
   Plug 'jiaoshijie/undotree'
     Plug 'nvim-lua/plenary.nvim'
   Plug 'folke/which-key.nvim'
@@ -64,9 +70,11 @@ syntax sync fromstart
 
 " If the terminal doesn't support true color... no luck
 if has('nvim')
-  colo kanagawa
-  " CursorLine fix... setting ctermfg (which guifg overrides) makes it high priority
-  hi CursorLine guibg=#363646 ctermfg=1
+  "colo kanagawa "Handled by themery
+  lua require("themery").setup({ themes = {"kanagawa", "kanagawa-dragon", "kanagawa-lotus", "kanagawa-wave", "gruvbox", "ayu", "ayu-mirage", "moonshine", "rose-pine", "rose-pine-dawn", "rose-pine-moon" }})
+  " CursorLine fix... setting ctermfg (which guifg overrides) makes it high priority so it can
+  " override the background
+  hi CursorLine ctermfg=1
 else
   colo kanagawa-mini
 
