@@ -272,7 +272,6 @@ if has('nvim')
   lua vim.fn.sign_define('DapStopped', {text='➤', texthl='', linehl='', numhl=''})
 
   lua require("nvim-dap-virtual-text").setup()
-  lua require("dap-lldb").setup()
 else
   nmap <silent> <leader>d <Plug>(coc-definition)
   nmap <silent> <leader>D <Plug>(coc-declaration)
