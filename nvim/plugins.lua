@@ -129,3 +129,11 @@ require'marks'.setup {
   mappings = {}
 }
 --: }}}
+
+local dap = require('dap')
+dap.adapters.lldb = {
+  type = 'executable',
+  command = '/Library/Developer/CommandLineTools/usr/bin/lldb-dap',
+  name = 'lldb'
+}
+

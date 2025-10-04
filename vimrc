@@ -40,15 +40,23 @@ if has('nvim')
   Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main', 'do': { -> TsUpdateHook() }}
+    Plug 'nvim-tree/nvim-web-devicons'
   Plug 'jiaoshijie/undotree'
     Plug 'nvim-lua/plenary.nvim'
+
   Plug 'folke/which-key.nvim'
-  Plug 'folke/trouble.nvim'
   Plug 'tversteeg/registers.nvim'
-  Plug 'LunarVim/bigfile.nvim'
-  Plug 'neovim/nvim-lspconfig'
+
+  Plug 'folke/trouble.nvim'
   Plug 'lewis6991/gitsigns.nvim'
   Plug 'chentoast/marks.nvim'
+
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'mfussenegger/nvim-dap'
+    Plug 'igorlfs/nvim-dap-view'
+    Plug 'theHamsta/nvim-dap-virtual-text'
+
+  Plug 'LunarVim/bigfile.nvim'
 else
   Plug 'PhilRunninger/bufselect', {'branch': 'vim-compatible'}
   Plug 'simnalamburt/vim-mundo'
@@ -238,14 +246,34 @@ vnoremap @ y:@"<Cr>
 if has('nvim')
   set completeopt=menu,popup,noinsert
 
-  nnoremap grd <cmd>lua vim.lsp.buf.definition()<Cr>
+  noremap gr <nop>
+  noremap grd <cmd>lua vim.lsp.buf.definition()<Cr>
   " As in "Overview", also defaultly mapped to just gO
-  nnoremap grO <cmd>lua vim.lsp.buf.document_symbol()<Cr>
+  noremap grO <cmd>lua vim.lsp.buf.document_symbol()<Cr>
+  noremap grf <cmd>lua vim.lsp.buf.format()<Cr>
 
   lua vim.lsp.enable('clangd')
   lua vim.lsp.enable('pyright')
   lua vim.lsp.enable('vimls')
   lua vim.lsp.enable('csharp-ls')
+
+  " Debugger bindings
+  " C-S is used because typing the leader is a lot for stepping
+  nnoremap <M-b>      <cmd>DapToggleBreakpoint<Cr>
+  nnoremap <M-s>      <cmd>DapStepIn<Cr>
+  nnoremap <M-n>      <cmd>DapStepOver<Cr>
+  nnoremap <leader>dr <cmd>DapStepOver<Cr>
+  nnoremap <leader>dc <cmd>DapContinue<Cr>
+  nnoremap <leader>dt <cmd>DapTerminate<Cr>
+  nnoremap <leader>du <cmd>DapClearBreakpoints<Cr>
+  nnoremap <leader>de <cmd>lua require'dap'.repl.open()<Cr>
+  nnoremap <leader>ds <cmd>DapViewToggle<Cr>
+
+  lua vim.fn.sign_define('DapBreakpoint', {text='🛑', texthl='', linehl='', numhl=''})
+  lua vim.fn.sign_define('DapStopped', {text='➤', texthl='', linehl='', numhl=''})
+
+  lua require("nvim-dap-virtual-text").setup()
+  lua require("dap-lldb").setup()
 else
   nmap <silent> <leader>d <Plug>(coc-definition)
   nmap <silent> <leader>D <Plug>(coc-declaration)
@@ -302,7 +330,6 @@ command! Sv so $MYVIMRC
 command! DiscardUndos set undoreload=0 | edit | set undoreload=10000
 command! -nargs=+ -complete=function  Grep  grep! <args> | copen
 command! -nargs=+ -complete=function LGrep lgrep! <args> | lopen
-command! -nargs=+ Help tab :help <args>
 
 " modify selected text using combining diacritics
 " https://vim.fandom.com/wiki/Create_underlines,_overlines,_and_strikethroughs_using_combining_characters
