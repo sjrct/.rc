@@ -35,8 +35,7 @@ if has('nvim')
     Plug 'Shatur/neovim-ayu'
     Plug 'rose-pine/neovim'
 
-  Plug 'mistweaverco/bafa.nvim'
-    Plug 'nvim-tree/nvim-web-devicons'
+  Plug 'PhilRunninger/bufselect'
   Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'nvim-treesitter/nvim-treesitter', {'branch': 'main', 'do': { -> TsUpdateHook() }}
@@ -375,8 +374,6 @@ let g:c_syntax_for_h = 1
 
 " Fuzzy tools, buffer lists, etc
 if has('nvim')
-  nnoremap <silent> <leader>b <cmd>lua require('bafa.ui').toggle()<cr>
-
   nnoremap <leader>ff <cmd>Telescope find_files<cr>
   nnoremap <leader>fg <cmd>Telescope live_grep<cr>
   nnoremap <leader>fb <cmd>Telescope buffers<cr>
@@ -387,10 +384,9 @@ if has('nvim')
   nnoremap <leader>xX <cmd>Trouble diagnostics toggle filter.buf=0<cr>
   nnoremap <leader>xl <cmd>Trouble loclist toggle<cr>
   nnoremap <leader>xq <cmd>Trouble qfxlist toggle<cr>
-
-else
-  nnoremap <silent> <leader>b :ShowBufferList<CR>
 endif
+
+nnoremap <silent> <leader>b :ShowBufferList<CR>
 
 nnoremap <C-P> <cmd>FZF<Cr>
 
