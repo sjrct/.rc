@@ -5,7 +5,7 @@ if [ (fish --version | cut -f3 -d' ' | cut -f1 -d.) -lt 4 ]
 end
 
 if status is-interactive
-  #: Abbreviations {{{
+  #: Abbreviations / aliases {{{
 
   function _subcmd_abbr -a cmd from to pos
     eval "function _abbr-$cmd-$from -a token
@@ -56,17 +56,18 @@ if status is-interactive
   _git_subcmd_abbr st status
   _git_subcmd_abbr sw switch
 
-  type -q xclip && abbr --add xcopy 'xclip -in -selection clipboard'
-  type -q xclip && abbr --add xpaste 'xclip -out -selection clipboard'
+  type -q xclip && alias xcopy 'xclip -in -selection clipboard'
+  type -q xclip && alias xpaste 'xclip -out -selection clipboard'
 
-  type -q eza && abbr --add ls eza --icons=auto
+  type -q eza && alias ls eza --icons=auto
 
-  [ $TERM = xterm-kitty ] && abbr --add ssh kitten ssh
+  [ $TERM = xterm-kitty ] && alias ssh kitten ssh
 
   # In case I accidentally remember anything from (ba|z)sh...
   abbr --position=anywhere '$?' '$status'
   abbr --position=anywhere '$!' '$last_pid'
   abbr --position=anywhere '$$' '$fish_pid'
+  abbr '\\' command
   #: }}}
 
   #: Plugins {{{
