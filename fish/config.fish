@@ -59,9 +59,9 @@ if status is-interactive
   type -q xclip && alias xcopy 'xclip -in -selection clipboard'
   type -q xclip && alias xpaste 'xclip -out -selection clipboard'
 
-  type -q eza && alias ls eza --icons=auto
+  type -q eza && alias ls 'eza --icons=auto'
 
-  [ $TERM = xterm-kitty ] && alias ssh kitten ssh
+  [ $TERM = xterm-kitty ] && alias ssh 'kitten ssh'
 
   # In case I accidentally remember anything from (ba|z)sh...
   abbr --position=anywhere '$?' '$status'
