@@ -8,7 +8,7 @@ then
   # Doesn't happen when using bash with -c, when running from fish, if not in
   # interactive mode, or if fish doesn't exist!
   if [[ -z "$BASH_EXECUTION_STRING" \
-     && $(ps --no-header --pid=$PPID --format=comm) != "fish" \
+     && ! $(ps -p $PPID -o comm) =~ "fish" \
      && -n $(type fish 2> /dev/null) ]]
   then
     shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
