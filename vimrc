@@ -255,6 +255,7 @@ if has('nvim')
   lua vim.lsp.enable('pyright')
   lua vim.lsp.enable('vimls')
   lua vim.lsp.enable('csharp-ls')
+  lua vim.lsp.enable('cmake')
 
   " Debugger bindings
   " C-S is used because typing the leader is a lot for stepping
