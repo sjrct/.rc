@@ -15,7 +15,6 @@ Plug 'vim-airline/vim-airline'
 Plug 'Chiel92/vim-autoformat'
 " Handle lines numbers with gF etc
 Plug 'wsdjeg/vim-fetch'
-Plug 'ludovicchabant/vim-gutentags'
 Plug 'posva/vim-vue'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'ap/vim-css-color'
@@ -56,10 +55,12 @@ if has('nvim')
     Plug 'theHamsta/nvim-dap-virtual-text'
 
   Plug 'LunarVim/bigfile.nvim'
+  Plug 'linrongbin16/gentags.nvim'
 else
   Plug 'PhilRunninger/bufselect', {'branch': 'vim-compatible'}
   Plug 'simnalamburt/vim-mundo'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'ludovicchabant/vim-gutentags'
 endif
 
 call plug#end()
