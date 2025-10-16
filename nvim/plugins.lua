@@ -1,4 +1,6 @@
 -- vim:foldmethod=marker
+
+--: Telescope setup {{{
 require('telescope').setup{
   defaults = {
     -- Default configuration for telescope goes here:
@@ -28,6 +30,7 @@ require('telescope').setup{
     -- please take a look at the readme of the extension you want to configure
   }
 }
+--: }}}
 
 require('nvim-treesitter.config').setup({
   highlight = {
@@ -50,41 +53,6 @@ require('which-key').setup({
 
 
 local augrp = vim.api.nvim_create_augroup('plugins.lua', {clear = true})
-
---: Completion {{{
-vim.api.nvim_create_autocmd('InsertCharPre', {
-  group = augrp,
-  buffer = vim.api.nvim_get_current_buf(),
-  callback = function()
-    if vim.fn.pumvisible() == 1 or vim.fn.state('m') == 'm' then
-      return
-    end
-
-    local char = vim.v.char
-    local line = vim.api.nvim_get_current_line()
-
-    -- Trigger when typing non-whitespace char on whitespace-only line
-    if not char:match('%s') and line:match('^%s*$') and vim.opt.omnifunc:get() ~= "" then
-      local key = vim.keycode('<C-x><C-o>')
-      vim.api.nvim_feedkeys(key, 'm', false)
-    end
-  end
-})
-
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = augrp,
-  callback = function(args)
-    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-    if client:supports_method('textDocument/implementation') then
-      -- Create a keymap for vim.lsp.buf.implementation ...
-    end
-    -- Enable auto-completion using server-defined trigger characters
-    if client:supports_method('textDocument/completion') then
-      vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
-    end
-  end
-})
---: }}}
 
 vim.diagnostic.config({
   -- virtual_lines = true,
@@ -136,4 +104,3 @@ dap.adapters.lldb = {
   command = '/Library/Developer/CommandLineTools/usr/bin/lldb-dap',
   name = 'lldb'
 }
-

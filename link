@@ -83,9 +83,12 @@ end
 #:}}}
 
 #: dependency check {{{
+# deps - requirements for this script
 set deps fish wget git
+# recs - requirements for different parts of setup
+#        TODO give reasons for requirements so I know if I can ignore...?
 set recs vim nvim fzf fisher eza wezterm bat \
-         pyright clangd vim-language-server csharp-ls cmake-language-server \
+         cargo npm \
          lldb-dap
 
 # Check if dependencies exist
@@ -103,6 +106,7 @@ for rec in $recs
   end
 end
 #: }}}
+
 begin
   #: Argument handling {{{
   argparse -n link 'i/install-path=' 'h/help' 'v/verbose' -- $argv

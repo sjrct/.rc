@@ -21,6 +21,9 @@ Plug 'ap/vim-css-color'
 Plug 'leviosa42/kanagawa-mini.vim'
 Plug 'junegunn/fzf'
 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'puremourning/vimspector'
+
 if has('nvim')
   function TsUpdateHook()
     TSUpdate
@@ -59,7 +62,6 @@ if has('nvim')
 else
   Plug 'PhilRunninger/bufselect', {'branch': 'vim-compatible'}
   Plug 'simnalamburt/vim-mundo'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'ludovicchabant/vim-gutentags'
 endif
 
@@ -252,12 +254,6 @@ if has('nvim')
   noremap grO <cmd>lua vim.lsp.buf.document_symbol()<Cr>
   noremap grf <cmd>lua vim.lsp.buf.format()<Cr>
 
-  lua vim.lsp.enable('clangd')
-  lua vim.lsp.enable('pyright')
-  lua vim.lsp.enable('vimls')
-  lua vim.lsp.enable('csharp-ls')
-  lua vim.lsp.enable('cmake')
-
   " Debugger bindings
   " C-S is used because typing the leader is a lot for stepping
   nnoremap <M-b>      <cmd>DapToggleBreakpoint<Cr>
@@ -275,16 +271,24 @@ if has('nvim')
 
   lua require("nvim-dap-virtual-text").setup()
 else
-  nmap <silent> <leader>d <Plug>(coc-definition)
-  nmap <silent> <leader>D <Plug>(coc-declaration)
-  nmap <silent> <leader>t <Plug>(coc-type-definition)
-  nmap <silent> <leader>r <Plug>(coc-references)
-  nmap <silent> [g <Plug>(coc-diagnostic-prev)
-  nmap <silent> ]g <Plug>(coc-diagnostic-next)
-  nmap <leader>a <Plug>(coc-codeaction)
-  nmap <leader>R <Plug>(coc-rename)
-  inoremap <silent><expr> <c-@> coc#start()
 endif
+
+let g:coc_global_extensions = [
+      \  'coc-marketplace',
+      \  'coc-html',
+      \  'coc-pyright',
+      \  'coc-clangd'
+      \]
+
+nmap <silent> <leader>d <Plug>(coc-definition)
+nmap <silent> <leader>D <Plug>(coc-declaration)
+nmap <silent> <leader>t <Plug>(coc-type-definition)
+nmap <silent> <leader>r <Plug>(coc-references)
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <leader>a <Plug>(coc-codeaction)
+nmap <leader>R <Plug>(coc-rename)
+inoremap <silent><expr> <c-@> coc#start()
 
 " Terminal mode stuff
 function! TermStartup()
