@@ -99,6 +99,34 @@ if status is-interactive
   bind -M insert alt-backspace backward-kill-word
   bind -M insert ctrl-backspace backward-kill-word
   #: }}}
+
+  # Private mode {{{
+  function toggle_private_mode
+    if set -q fish_private_mode
+      set -e fish_private_mode
+    else
+      set -g fish_private_mode 1
+    end
+  end
+
+  bind -M insert ctrl-\\ toggle_private_mode
+
+  # So that kitty (or whoever) can know if a particular PID is in private mode
+  function _track_private_mode --on-variable fish_private_mode
+    if set -q fish_private_mode
+      touch /tmp/fish-private-$fish_pid
+    else
+      rm -f /tmp/fish-private-$fish_pid
+    end
+  end
+
+  # Handles --private
+  _track_private_mode
+
+  function _cleanup_track_private_mode --on-event fish_exit
+    rm -f /tmp/fish-private-$fish_pid
+  end
+  # }}}
 end
 
 #: Set EDITOR and MANPAGER {{{
