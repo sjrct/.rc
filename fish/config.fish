@@ -77,6 +77,7 @@ if status is-interactive
     end
 
     fi patrickf1/fzf.fish
+    fi jorgebucaran/nvm.fish
   end
   #: }}}
 
