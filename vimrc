@@ -60,6 +60,9 @@ if has('nvim')
 
   Plug 'LunarVim/bigfile.nvim'
   Plug 'linrongbin16/gentags.nvim'
+
+  Plug 'elixir-tools/elixir-tools.nvim', { 'tag': 'stable' }
+    Plug 'nvim-lua/plenary.nvim'
 else
   Plug 'PhilRunninger/bufselect', {'branch': 'vim-compatible'}
   Plug 'simnalamburt/vim-mundo'
