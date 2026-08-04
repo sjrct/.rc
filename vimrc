@@ -278,10 +278,10 @@ else
 endif
 
 let g:coc_global_extensions = [
-      \  'coc-marketplace',
+      \  'coc-clangd',
       \  'coc-html',
-      \  'coc-pyright',
-      \  'coc-clangd'
+      \  'coc-json',
+      \  'coc-marketplace',
       \]
 
 nmap <silent> <leader>d <Plug>(coc-definition)
