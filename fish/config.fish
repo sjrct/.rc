@@ -25,36 +25,61 @@ if status is-interactive
   abbr -a vim nvim
   abbr -a kc kubectl
 
-  # Docker composer abbrevs
-  function _dc_subcmd_abbr -a from to
-    _subcmd_abbr docker $from $to 3
-    abbr -a dc$from "git $to"
-  end
-
+  # Docker & docker composer abbrevs
+  abbr -a d 'docker'
   abbr -a dc 'docker compose'
+  abbr -a dcm 'docker compose'
+  abbr -a dcn 'docker container'
+  abbr -a di 'docker image'
+  abbr -a dim 'docker image'
+  abbr -a din 'docker inspect'
   abbr -a docker-compose 'docker compose'
-  _dc_subcmd_abbr d down
-  _dc_subcmd_abbr u 'up -d'
-  _dc_subcmd_abbr r restart
-  _dc_subcmd_abbr l logs
-  _dc_subcmd_abbr e exec
+  # docker subcommands
+  _subcmd_abbr docker b build 2
+  _subcmd_abbr docker cm compose 2
+  _subcmd_abbr docker com compose 2
+  _subcmd_abbr docker cn container 2
+  _subcmd_abbr docker con container 2
+  _subcmd_abbr docker cont container 2
+  _subcmd_abbr docker e exec 2
+  _subcmd_abbr docker x exec 2
+  _subcmd_abbr docker im image 2
+  _subcmd_abbr docker in inspect 2
+  _subcmd_abbr docker n network 2
+  _subcmd_abbr docker p pull 2
+  _subcmd_abbr docker r run 2
+  _subcmd_abbr docker s search 2
+  # compose/image/container subcommands (together as they all use arg 3)
+  _subcmd_abbr docker d down 3
+  _subcmd_abbr docker di diff 3
+  _subcmd_abbr docker e exec 3
+  _subcmd_abbr docker x exec 3
+  _subcmd_abbr docker h history 3
+  _subcmd_abbr docker i inspect 3
+  _subcmd_abbr docker k kill 3
+  _subcmd_abbr docker l logs 3
+  _subcmd_abbr docker pa pause 3
+  _subcmd_abbr docker po port 3
+  _subcmd_abbr docker r restart 3
+  _subcmd_abbr docker u 'up -d' 3
+  _subcmd_abbr docker unp unpause 3
 
   # Git abbrevs
-  function _git_subcmd_abbr -a from to
-    _subcmd_abbr git $from $to 2
-    abbr -a g$from "git $to"
-  end
-
   abbr -a g 'git'
-  _git_subcmd_abbr a add
-  _git_subcmd_abbr ch checkout
-  _git_subcmd_abbr cm commit
-  _git_subcmd_abbr d diff
-  _git_subcmd_abbr l log
-  _git_subcmd_abbr ph push
-  _git_subcmd_abbr pl pull
-  _git_subcmd_abbr st status
-  _git_subcmd_abbr sw switch
+  _subcmd_abbr git a add 2
+  _subcmd_abbr git ch checkout 2
+  _subcmd_abbr git co commit 2
+  _subcmd_abbr git cm commit 2
+  _subcmd_abbr git d diff 2
+  _subcmd_abbr git di diff 2
+  _subcmd_abbr git l log 2
+  _subcmd_abbr git ph push 2
+  _subcmd_abbr git pl pull 2
+  _subcmd_abbr git r reset 2
+  _subcmd_abbr git re reset 2
+  _subcmd_abbr git rv revert 2
+  _subcmd_abbr git st status 2
+  _subcmd_abbr git sw switch 2
 
   type -q xclip && alias xcopy 'xclip -in -selection clipboard'
   type -q xclip && alias xpaste 'xclip -out -selection clipboard'
