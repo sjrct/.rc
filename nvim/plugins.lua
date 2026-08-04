@@ -104,3 +104,11 @@ dap.adapters.lldb = {
   command = '/Library/Developer/CommandLineTools/usr/bin/lldb-dap',
   name = 'lldb'
 }
+
+require("dap-python").setup("/Users/chris_harding/.local/pipx/venvs/debugpy/bin/python3")
+
+require("elixir").setup({
+  nextls = {enable = false},
+  elixirls = {enable = true},
+  projectionist = {enable = true},
+})

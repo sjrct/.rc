@@ -56,6 +56,7 @@ if has('nvim')
   Plug 'mfussenegger/nvim-dap'
     Plug 'igorlfs/nvim-dap-view'
     Plug 'theHamsta/nvim-dap-virtual-text'
+    Plug 'mfussenegger/nvim-dap-python'
 
   Plug 'LunarVim/bigfile.nvim'
   Plug 'linrongbin16/gentags.nvim'
@@ -255,11 +256,11 @@ if has('nvim')
   noremap grf <cmd>lua vim.lsp.buf.format()<Cr>
 
   " Debugger bindings
-  " C-S is used because typing the leader is a lot for stepping
   nnoremap <M-b>      <cmd>DapToggleBreakpoint<Cr>
   nnoremap <M-s>      <cmd>DapStepIn<Cr>
   nnoremap <M-n>      <cmd>DapStepOver<Cr>
-  nnoremap <leader>dr <cmd>DapStepOver<Cr>
+  nnoremap <M-m>      <cmd>DapStepIn<Cr>
+  nnoremap <leader>dr <cmd>DapStepOut<Cr>
   nnoremap <leader>dc <cmd>DapContinue<Cr>
   nnoremap <leader>dt <cmd>DapTerminate<Cr>
   nnoremap <leader>du <cmd>DapClearBreakpoints<Cr>
